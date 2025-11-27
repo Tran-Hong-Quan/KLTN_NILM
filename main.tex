@@ -276,17 +276,18 @@ Phạm vi nghiên cứu tập trung vào:
     \item Môi trường có nhiều thiết bị hoạt động đồng thời.
 \end{itemize}
 
-Các yếu tố như ước lượng năng lượng tiêu thụ theo thời gian dài, tối ưu hóa mô hình học máy nâng cao, hay triển khai thời gian thực trên thiết bị phần cứng không nằm trong phạm vi của đề tài này.
-
+Các yếu tố như ước lượng năng    
 \chapter{Tổng quan hệ thống NILM đề xuất}
 \section{Kiến trúc và các thành phần chính của hệ thống}
 \begin{figure}[h]{Sơ đồ hệ thống NILM}
     \centering
-    \includegraphics[width=0.9\linewidth]{IMAGE/Sơ đồ NILM.jpg}
+    \includegraphics[width=0.9\linewidth]{IMAGE/LuongHeThongNILM.jpg}
 \end{figure}
 
 Hệ thống NILM đề xuất bao gồm các khối chức năng chính như sau
+
 \subsection{Khối thu thập tín hiệu}
+
 \begin{itemize}
     \item Thu thập dữ liệu dòng điện (I) và điện áp (U) từ công tơ tổng theo thời gian thực.
     \item Từ các tín hiệu này, tính toán công suất tiêu thụ (P) của toàn hệ thống.
@@ -376,7 +377,9 @@ Việc thu thập tín hiệu cả trước và sau sự kiện cho phép
 
 \section{Phạm vi thực hiện}
 Trong đồ án này, dữ liệu chỉ được sử dụng để đánh giá và nhận diện trên máy tính, thông qua file dữ liệu và xử lý bằng Python. Hệ thống chưa được triển khai thực tế, mà mới dừng ở mức mô phỏng quá trình phát hiện sự kiện và nhận diện dựa trên dữ liệu đã thu thập.
+
 \section{Ghi chú về triển khai thực tế}
+
 Trong ứng dụng thực tế của NILM, để xác định đúng vùng trước và sau của mỗi sự kiện, hệ thống phải liên tục lưu trữ và cập nhật tín hiệu U và I theo thời gian thực. Điều này giúp bất cứ khi nào có sự kiện phát sinh (ví dụ thiết bị bật/tắt), hệ thống luôn có sẵn vùng tín hiệu “trước sự kiện” và “sau sự kiện” để đưa vào thuật toán phát hiện và nhận diện.
 
 \chapter{Thuật toán phát hiện sự kiện}
@@ -866,8 +869,11 @@ Mô hình học máy chỉ đánh giá trên 82 sự kiện mà nó nhận đư�
 Nhờ quy ước này, ta có thể đánh giá toàn bộ hệ thống (gồm cả phát hiện + phân loại) theo cách tương tự như đánh giá một mô hình ML thông thường.
 
 \section{Kết quả thực nghiệm}
+
 Tổng số sự kiện cần nhận diện: 116 sự kiện
+
 \subsection{Đánh giá hệ thống sử dụng thuật toán phát hiện sự kiện WAMMA}
+
 \begin{itemize}
     \item Số sự kiện được phát hiện chính xác: 65/116 (56\%)
     \item Số sự kiện bỏ lỡ: 51/116 (44\%)

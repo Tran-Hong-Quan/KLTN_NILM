@@ -1,0 +1,40 @@
+# LaTeX temporary files
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.nav
+*.snm
+*.vrb
+*.bbl
+*.blg
+*.brf
+*.run.xml
+
+# Generated PDF
+*.pdf
+
+# Generated DVI/PS files
+*.dvi
+*.ps
+
+# Backup files
+*~
+*.bak
+*.backup
+
+# Sublime Text / VSCode temporary files
+*.swp
+*.swo
+.vscode/
+*.tmp
+
+# Latexmk database
+.latexmkrc
+UET logo.pdf:Zone.Identifier
+!UET logo.pdf
