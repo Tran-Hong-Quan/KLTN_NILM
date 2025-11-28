@@ -1,4 +1,5 @@
 \documentclass{uetgraduation}
+
 \usepackage[hidelinks]{hyperref}
 \setlength{\parindent}{2em}
 \usepackage{array}      % mở rộng tùy chọn cột
@@ -280,7 +281,7 @@ Các yếu tố như ước lượng năng lượng tiêu thụ theo thời gian
 
 \chapter{Tổng quan hệ thống NILM đề xuất}
 \section{Kiến trúc và các thành phần chính của hệ thống}
-\begin{figure}[h]{Sơ đồ hệ thống NILM}
+\begin{figure}[H]{Sơ đồ hệ thống NILM}
     \centering
     \includegraphics[width=0.9\linewidth]{IMAGE/LuongHeThongNILM.jpg}
 \end{figure}
@@ -391,7 +392,6 @@ Trong bài toán phân tích phụ tải phi xâm lấn (NILM), sự kiện (eve
 \textbf{Một số thuật ngữ cơ bản:}
 \begin{table}[h]{Giải thích một số thuật ngữ về thuật toán phát hiện sự kiện}
     \centering
-    \label{tab:glossary_fixed}
     \begin{adjustbox}{width=\linewidth}
         \begin{tabularx}{\linewidth}{| >{\centering\arraybackslash}p{3cm} | X |}
             \hline
@@ -443,14 +443,15 @@ Tín hiệu đầu vào được giảm tần số mẫu, ví dụ từ 1000~Hz 
     \item Áp dụng thuật toán MLZLI để phát hiện các sự kiện nhỏ hoặc xảy ra chậm.
 \end{itemize}
 
-\textbf{3. Khối gộp sự kiện (Event Merging) và ra quyết định} \\
+\textbf{3. Khối gộp sự kiện (Event Merging) và ra quyết định} 
+
 \begin{itemize}
     \item Kết hợp kết quả từ hai nhánh xử lý.
     \item Loại bỏ các sự kiện xuất hiện quá gần nhau (dưới ngưỡng thời gian tối thiểu).
     \item Tạo ra danh sách sự kiện cuối cùng, đảm bảo tính chính xác và ổn định của hệ thống.
 \end{itemize}
 
-\begin{figure}[h]{Sơ đồ thuật toán phát hiện sự kiện đề xuất}
+\begin{figure}[H]{Sơ đồ thuật toán phát hiện sự kiện đề xuất}
     \centering
     \includegraphics[width=0.9\linewidth]{IMAGE/Event_Dectection/sodoevt.jpg}
 \end{figure}
@@ -486,12 +487,14 @@ Trong hệ thống được xây dựng, bộ lọc trung bình còn được s�
     \item Tăng tốc độ và độ ổn định cho các thuật toán phát hiện sự kiện.
 \end{itemize}
 
-\begin{figure}[h]{Đồ thị công suất với công suất gốc tần số 30kHz và lấy mẫu lọc trung bình 50Hz trên tập PLAID}
+\begin{figure}[H]{Đồ thị công suất với công suất gốc tần số 30kHz và lấy mẫu lọc trung bình 50Hz trên tập PLAID}
     \centering
     \includegraphics[width=0.8\linewidth]{IMAGE/Event_Dectection/loctb.jpg}
 \end{figure}
 
 \section{Thuật toán WAMMA}
+
+\raggedright
 WAMMA (Window with Adaptive Margins, Multi-window Screening, and Adaptive Threshold - Cửa sổ với lề thích ứng, sàng lọc đa cửa sổ và ngưỡng thích ứng) là một phương pháp phát hiện Sự kiện Mạnh Mẽ được đề xuất để cải thiện độ chính xác của hệ thống Giám sát Phụ tải Không Xâm lấn (NILM) dựa trên sự kiện.
 
 Thuật toán này giải quyết vấn đề cốt lõi của các phương pháp truyền thống: tính cố định của tham số. Các tham số cố định không hiệu quả khi xử lý dữ liệu công suất thực tế có biến động cao ($\sigma_{\text{local}} \uparrow$), quá trình chuyển tiếp kéo dài, hoặc sự kiện gần đồng thời.
@@ -513,7 +516,6 @@ WAMMA xác định một sự kiện thông qua bốn pha liên tiếp:
 Mã giả dưới đây minh họa chi tiết luồng logic của thuật toán WAMMA.
 \begin{algorithm}[H]
 \caption{Thuật toán Phát hiện Sự kiện Mạnh mẽ WAMMA}
-\label{alg:wamma_pseudocode}
 \begin{algorithmic}[1]
 \Require $P_{\text{total}}$ (Dãy công suất tổng hợp), $\text{ThamSoCoBan}$
 \Ensure $\text{Events}$ (Danh sách $\{t_{\text{start}}, t_{\text{end}}, \Delta P_{\text{final}}\}$)
@@ -683,11 +685,11 @@ Vì hệ thống NILM đã biết được U, I của thời điểm trước v�
     In+1 = Ip - It 
 \end{equation}
 
-\begin{figure}[h]{Mạng điện trước khi cắm thêm thiết bị n+1}
+\begin{figure}[H]{Mạng điện trước khi cắm thêm thiết bị n+1}
     \centering
     \includegraphics[height=0.4\linewidth]{IMAGE/Co_so_ly_thuyet_tien_xu_ly/mangdienn.jpg}
 \end{figure}
-\begin{figure}[h]{Mạng điện sau khi cắm thêm thiết bị n+1}
+\begin{figure}[H]{Mạng điện sau khi cắm thêm thiết bị n+1}
     \centering
     \includegraphics[height=0.4\linewidth]{IMAGE/Co_so_ly_thuyet_tien_xu_ly/mangdienn_1.jpg}
 \end{figure}
@@ -698,13 +700,13 @@ Khi thu thập dữ liệu trong một khoảng thời gian đủ dài trước 
 
 Ngoài ra, trong điều kiện thực tế, nếu cảm biến hoạt động ở tần số lấy mẫu thấp hoặc không ổn định, các điểm lấy mẫu thậm chí còn có khoảng cách thời gian không đều nhau. Điều này làm cho việc so khớp pha và tái dựng dạng sóng càng trở nên khó khăn, đòi hỏi phải có bước xử lý bổ sung như nội suy, đồng bộ pha hoặc tái đồng bộ tín hiệu trước khi phân tích.
 
-\begin{figure}[h]{Minh họa mảng $Up$ và $Ut$ khác nhau, nên đồ thì chúng cũng khác nhau
+\begin{figure}[H]{Minh họa mảng $Up$ và $Ut$ khác nhau, nên đồ thì chúng cũng khác nhau
 }
     \centering
     \includegraphics[width=0.9\linewidth]{IMAGE/Trich xuat dac trung anh/Screenshot 2025-11-25 103337.png}
 \end{figure}
 
-\begin{figure}[h]{Hình ảnh minh họa các điểm U được lấy mẫu lấy mẫu không đều}
+\begin{figure}[H]{Hình ảnh minh họa các điểm U được lấy mẫu lấy mẫu không đều}
     \centering
     \includegraphics[width=0.9\linewidth]{IMAGE/Trich xuat dac trung anh/Screenshot 2025-11-25 104309.png}
 \end{figure}
@@ -718,7 +720,7 @@ Với vấn đề trên, chỉ cần đảm bảo U trước và sau giống nha
 
 Việc nội suy giúp tái dựng dạng sóng mượt hơn, đồng thời đảm bảo độ chính xác khi thực hiện các bước xử lý tiếp theo.
 
-\begin{figure}[h]{Ví dụ minh hoạ: nội suy tín hiệu $U$ với số lượng điểm tăng gấp 6 lần số điểm gốc}
+\begin{figure}[H]{Ví dụ minh hoạ: nội suy tín hiệu $U$ với số lượng điểm tăng gấp 6 lần số điểm gốc}
     \centering
     \includegraphics[width=0.9\linewidth]{IMAGE/Trich xuat dac trung anh/buoc1.png}
 \end{figure}
@@ -750,7 +752,7 @@ Khi tìm được độ dịch tối ưu:
 \end{itemize}
 Nhờ đó, phần biến thiên của dòng điện thu được phản ánh đúng thay đổi do thiết bị tạo ra, thay vì sai lệch pha hoặc sai lệch thời gian giữa các mẫu đo.
 
-\begin{figure}[h]{Minh họa Up, Ut trước và sau khi dịch theo Up}
+\begin{figure}[H]{Minh họa Up, Ut trước và sau khi dịch theo Up}
     \centering
     \includegraphics[width=0.9\linewidth]{IMAGE/Trich xuat dac trung anh/buoc2.png}
 \end{figure}
@@ -763,7 +765,7 @@ Tiếp theo, tính trung bình tất cả các đoạn theo từng vị trí m�
 
 Quá trình này giúp loại bỏ nhiễu, giảm ảnh hưởng của biến thiên tức thời, và thu được đặc trưng dạng sóng ổn định.
 
-\begin{figure}[h]{Hình minh họa mô tả quá trình chia đoạn và tính trung bình.}
+\begin{figure}[H]{Hình minh họa mô tả quá trình chia đoạn và tính trung bình.}
     \centering
     \includegraphics[width=0.9\linewidth]{IMAGE/Trich xuat dac trung anh/buoc3.png}
 \end{figure}
@@ -781,7 +783,7 @@ Hoàn thành bước này nghĩa là ta đã trích xuất thành công “đặ
 
 Các hình ảnh ở góc dưới bên trái minh họa tín hiệu U và I sau khi hoàn thành bước 3 (trích xuất đặc trưng dạng sóng), trong khi các hình còn lại thể hiện kết quả cuối sau bước 4.
 
-\begin{figure}[h]{Hình ảnh đồ thị từ bước 3 và 4.}
+\begin{figure}[H]{Hình ảnh đồ thị từ bước 3 và 4.}
     \centering
     \includegraphics[width=0.8\linewidth]{IMAGE/Trich xuat dac trung anh/buoc4.jpg}
 \end{figure}
@@ -792,32 +794,32 @@ Thực hiện đánh giá bằng cách so sánh đặc trưng ảnh giữa việ
 Chạy thử thuật toán trên một số thiết bị cho kết quả như sau:
 
 Đối với quạt không sử dụng thuật toán
-\begin{figure}[h]{Đặc trưng ảnh của quạt không sử dụng thuật toán và hoạt động một mình}
+\begin{figure}[H]{Đặc trưng ảnh của quạt không sử dụng thuật toán và hoạt động một mình}
     \centering
     \includegraphics[height=0.6\linewidth]{IMAGE/Ket_qua_thuat_toan_tao_anh/dactrungquatkothuattoan.png}
 \end{figure}
 
-\begin{figure}[h]{Đặc trưng ảnh của quạt có sử dụng thuật toán tạo ảnh và hoạt động một mình}
+\begin{figure}[H]{Đặc trưng ảnh của quạt có sử dụng thuật toán tạo ảnh và hoạt động một mình}
     \centering
     \includegraphics[height=0.6\linewidth]{IMAGE/Ket_qua_thuat_toan_tao_anh/dactrungquatthuatoan.png}
 \end{figure}
 
-\begin{figure}[h]{Đặc trưng ảnh của quạt khi dùng cả thuật toán trừ và thuật toán tạo ảnh}
+\begin{figure}[H]{Đặc trưng ảnh của quạt khi dùng cả thuật toán trừ và thuật toán tạo ảnh}
     \centering
     \includegraphics[width=0.9\linewidth]{IMAGE/Ket_qua_thuat_toan_tao_anh/dactrungquatcatru.png}
 \end{figure}
 
-\begin{figure}[h]{Đặc trưng ảnh của sạc máy tính không sử dụng thuật toán và hoạt động một mình}
+\begin{figure}[H]{Đặc trưng ảnh của sạc máy tính không sử dụng thuật toán và hoạt động một mình}
     \centering
     \includegraphics[height=0.6\linewidth]{IMAGE/Ket_qua_thuat_toan_tao_anh/image6.png}
 \end{figure}
 
-\begin{figure}[h]{Đặc trưng ảnh của sạc máy tính có sử dụng thuật toán tạo ảnh và hoạt động một mình}
+\begin{figure}[H]{Đặc trưng ảnh của sạc máy tính có sử dụng thuật toán tạo ảnh và hoạt động một mình}
     \centering
     \includegraphics[height=0.6\linewidth]{IMAGE/Ket_qua_thuat_toan_tao_anh/image7.png}
 \end{figure}
 
-\begin{figure}[h]{Đặc trưng ảnh của sạc máy tính khi dùng cả thuật toán trừ và thuật toán tạo ảnh}
+\begin{figure}[H]{Đặc trưng ảnh của sạc máy tính khi dùng cả thuật toán trừ và thuật toán tạo ảnh}
     \centering
     \includegraphics[width=0.9\linewidth]{IMAGE/Ket_qua_thuat_toan_tao_anh/image8.png}
 \end{figure}
@@ -833,6 +835,7 @@ Từ các ví dụ minh họa, có thể thấy rằng thuật toán trích xu�
 \chapter{Mô hình học máy}
 
 \chapter{Kết quả và đánh giá hệ thống}
+
 \section{Dữ liệu đánh giá}
 
 Bộ dữ liệu sử dụng để đánh giá hệ thống gồm 116 tệp dữ liệu, tương ứng với 5 thiết bị điện khác nhau.
@@ -841,6 +844,7 @@ Mỗi tệp mô tả quá trình một thiết bị thay đổi trạng thái (b
 Toàn bộ dữ liệu được tự thu thập trong phòng thí nghiệm, đảm bảo tính kiểm soát và đồng nhất về môi trường đo
 
 \section{Quy trình đánh giá}
+
 Trong quá trình đánh giá, hệ thống nhận đầu vào là một tệp dữ liệu duy nhất, sau đó
 Đọc tuần tự giá trị dòng điện (I) và điện áp (U) tức thời.
 
@@ -880,7 +884,9 @@ Tổng số sự kiện cần nhận diện: 116 sự kiện
     \item Số sự kiện bỏ lỡ: 51/116 (44\%)
     \item Số lượng sự kiện giả phát sinh: 2
 \end{itemize}
+
 \textbf{Kết quả đánh giả chỉ mô hình học máy:}
+
 \begin{itemize}
     \item F1 Score: 95\%
     \item Recall: 95\%
@@ -888,9 +894,9 @@ Tổng số sự kiện cần nhận diện: 116 sự kiện
     \item Accuracy: 95.24\%
 \end{itemize}
 
-\begin{figure}[h]{Kết quả phân loại sử dụng thuật toán WAMMA chỉ xét đến mô hình}
+\begin{figure}[H]{Kết quả phân loại sử dụng thuật toán WAMMA chỉ xét đến mô hình}
     \centering
-    \includegraphics[width=1\linewidth]{IMAGE/ket_qua_he_thong/image9.png}
+    \includegraphics[width=0.8\linewidth]{IMAGE/ket_qua_he_thong/image9.png}
 \end{figure}
 
 \textbf{Kết quả đánh giá toàn bộ hệ thống}
@@ -900,9 +906,10 @@ Tổng số sự kiện cần nhận diện: 116 sự kiện
     \item Percision: 88\%
     \item Accuracy: 50.85\%
 \end{itemize}
-\begin{figure}[h]{Kết quả toàn bộ hệ thống sử dụng thuật toán sự kiện WAMMA}
+
+\begin{figure}[H]{Kết quả toàn bộ hệ thống sử dụng thuật toán sự kiện WAMMA}
     \centering
-    \includegraphics[width=1\linewidth]{IMAGE/ket_qua_he_thong/image10.png}
+    \includegraphics[width=0.8\linewidth]{IMAGE/ket_qua_he_thong/image10.png}
 \end{figure}
 
 \subsection{Đánh giá hệ thống sử dụng thuật toán phát hiện sự kiện Hybrid của Mengqi Lu và Zuyi Li}
@@ -918,9 +925,9 @@ Tổng số sự kiện cần nhận diện: 116 sự kiện
     \item Percision: 99\%
     \item Accuracy: 98.75\%
 \end{itemize}
-\begin{figure}[h]{Kết quả phân loại sử dụng thuật toán Hybrid của Mengqi Lu và Zuyi Li chỉ xét đến mô hình}
+\begin{figure}[H]{Kết quả phân loại sử dụng thuật toán Hybrid của Mengqi Lu và Zuyi Li chỉ xét đến mô hình}
     \centering
-    \includegraphics[width=1\linewidth]{IMAGE/ket_qua_he_thong/image11.png}
+    \includegraphics[width=0.8\linewidth]{IMAGE/ket_qua_he_thong/image11.png}
 \end{figure}
 \textbf{Kết quả đánh giá toàn bộ hệ thống}
 \begin{itemize}
@@ -929,9 +936,9 @@ Tổng số sự kiện cần nhận diện: 116 sự kiện
     \item Percision: 97\%
     \item Accuracy: 67.52\%
 \end{itemize}
-\begin{figure}[h]{Kết quả toàn bộ hệ thống sử dụng thuật toán sự kiện Hybrid của Mengqi Lu và Zuyi Li}
+\begin{figure}[H]{Kết quả toàn bộ hệ thống sử dụng thuật toán sự kiện Hybrid của Mengqi Lu và Zuyi Li}
     \centering
-    \includegraphics[width=1\linewidth]{IMAGE/ket_qua_he_thong/image12.png}
+    \includegraphics[width=0.8\linewidth]{IMAGE/ket_qua_he_thong/image12.png}
 \end{figure}
 
 \subsection{Đánh giá hệ thống sử dụng thuật toán phát hiện sự kiện đề xuất}
@@ -947,10 +954,12 @@ Tổng số sự kiện cần nhận diện: 116 sự kiện
     \item Percision: 95\%
     \item Accuracy: 95.69\%
 \end{itemize}
-\begin{figure}[h]{Kết quả phân loại sử dụng thuật toán đề xuất chỉ xét đến mô hình}
+
+\begin{figure}[H]{Kết quả phân loại sử dụng thuật toán đề xuất chỉ xét đến mô hình}
     \centering
-    \includegraphics[width=1\linewidth]{IMAGE/ket_qua_he_thong/image13.png}
+    \includegraphics[width=0.8\linewidth]{IMAGE/ket_qua_he_thong/image13.png}
 \end{figure}
+
 \textbf{Kết quả đánh giá toàn bộ hệ thống}
 \begin{itemize}
     \item F1 Score: 84\%
@@ -958,9 +967,9 @@ Tổng số sự kiện cần nhận diện: 116 sự kiện
     \item Percision: 86\%
     \item Accuracy: 88.8\%
 \end{itemize}
-\begin{figure}[h]{Kết quả toàn bộ hệ thống sử dụng thuật toán sự kiện đề xuất}
+\begin{figure}[H]{Kết quả toàn bộ hệ thống sử dụng thuật toán sự kiện đề xuất}
     \centering
-    \includegraphics[width=1\linewidth]{IMAGE/ket_qua_he_thong/image14.png}
+    \includegraphics[width=0.8\linewidth]{IMAGE/ket_qua_he_thong/image14.png}
 \end{figure}
 
 \section{Nhận xét kết quả}
