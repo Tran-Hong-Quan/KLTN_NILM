@@ -7,6 +7,9 @@
 \usepackage{adjustbox}  % thu-phóng bảng theo bề rộng
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{amsfonts}   % hoặc
+\usepackage{amssymb}
+
 % Nếu cần định nghĩa thêm các kiểu đính kèm (ví dụ cho code, sơ đồ), bạn có thể đặt ở đây
 % \makeattachmenttype{...}{...}{...}{...}{...}{...}{...}{...}
 
@@ -71,12 +74,21 @@ Cuối cùng, tôi xin cảm ơn các thành viên trong nhóm myLab của thầ
 \chapter{Giới thiệu}
 
 \section{Đặt vấn đề}
+
 Trong bối cảnh nhu cầu năng lượng ngày càng tăng và yêu cầu tiết kiệm điện năng trở nên cấp thiết, việc theo dõi và phân tích mức tiêu thụ điện năng của từng thiết bị trong hộ gia đình hoặc cơ sở sản xuất là một vấn đề được quan tâm rộng rãi. Tuy nhiên, việc gắn cảm biến đo riêng biệt cho từng thiết bị vừa tốn kém, vừa khó triển khai trên quy mô lớn. Từ đó, bài toán giám sát tải điện không xâm lấn (Non-Intrusive Load Monitoring - NILM) ra đời như một hướng tiếp cận hiệu quả, cho phép nhận dạng và ước lượng mức tiêu thụ của từng thiết bị chỉ từ dữ liệu tổng dòng điện và điện áp đo tại điểm đầu nguồn.
 
-Mặc dù NILM đã được nghiên cứu trong nhiều năm, nhưng các hệ thống hiện tại vẫn gặp phải nhiều hạn chế thực tế. Đa phần các mô hình trong các công trình nghiên cứu giả định rằng tại một thời điểm chỉ có một thiết bị thay đổi trạng thái (bật hoặc tắt). Giả định này giúp việc huấn luyện và phân loại tín hiệu trở nên dễ dàng hơn, nhưng lại không phản ánh đúng môi trường thực tế — nơi có thể có nhiều thiết bị bật tắt gần như đồng thời, gây chồng lấn tín hiệu và dẫn đến bỏ sót sự kiện hoặc nhận dạng sai thiết bị. Ngoài ra, các thuật toán phát hiện sự kiện thường nhạy cảm với nhiễu hoặc thay đổi nhỏ trong tín hiệu, khiến hệ thống mất ổn định khi triển khai trong thực tế.
+Mặc dù NILM đã được nghiên cứu trong nhiều năm, nhưng phần lớn các hệ thống hiện tại vẫn chỉ giải quyết một phần của bài toán. Nhiều công trình chỉ tập trung vào phát hiện thiết bị thay đổi trạng thái hoặc chỉ tập trung vào trích xuất đặc trưng và phân loại thiết bị, chứ không xây dựng đầy đủ toàn bộ quy trình từ đầu đến cuối. Ngoài ra, các nghiên cứu còn đặt ra giả định đơn giản hóa rằng trong một thời điểm chỉ có một thiết bị duy nhất bật hoặc tắt. Giả định này giúp thuật toán dễ xử lý hơn, nhưng lại không phù hợp với môi trường thực tế – nơi nhiều thiết bị có thể hoạt động và thay đổi trạng thái gần như đồng thời, khiến tín hiệu bị chồng lấn và gây khó khăn cho việc nhận dạng.
 
-Trước những hạn chế đó, đề tài này tập trung vào việc mô phỏng và xây dựng một hệ thống NILM có khả năng phát hiện chính xác các sự kiện bật/tắt của thiết bị ngay cả trong môi trường có nhiều tải hoạt động đồng thời. Hệ thống được thiết kế nhằm hạn chế việc bỏ lỡ sự kiện và duy trì độ chính xác nhận dạng thiết bị trong điều kiện phức tạp. Thông qua mô hình mô phỏng được phát triển bằng ngôn ngữ Python, hệ thống có thể xử lý tín hiệu điện tổng, tách biệt các đặc trưng của từng sự kiện, phát hiện thời điểm bật/tắt, và xác định loại thiết bị tương ứng.
-Kết quả nghiên cứu hướng đến việc tăng độ tin cậy của hệ thống NILM trong môi trường thực tế, đồng thời mở ra khả năng ứng dụng vào các hệ thống nhà thông minh (Smart Home), quản lý năng lượng (Energy Management Systems) và giám sát tiêu thụ điện trong công nghiệp.
+Trước những hạn chế đó, đề tài này phát triển một hệ thống NILM hoàn chỉnh, bao gồm toàn bộ chuỗi xử lý:
+\begin{enumerate}
+    \item Phát hiện thời điểm thiết bị thay đổi trạng thái
+    \item Trích xuất đặc trưng của chính thiết bị đó từ tín hiệu tổng
+    \item Phân loại, nhận diện loại thiết bị tương ứng
+\end{enumerate}
+
+Đây là điểm khác biệt quan trọng, vì hệ thống không chỉ thực hiện một phần của quy trình mà kết nối toàn bộ các bước lại thành một hệ thống thống nhất, có thể hoạt động từ đầu đến cuối.
+
+Bên cạnh đó, đề tài cũng xây dựng một phương pháp trích xuất đặc trưng mới trong môi trường phức tạp, nơi nhiều thiết bị đang hoạt động đồng thời. Các nghiên cứu trước thường phải giả sử rằng đã có sẵn thuật toán trích xuất đặc trưng trong môi trường nhiều thiết bị, hoặc đơn giản hóa điều kiện bằng cách yêu cầu chỉ có một thiết bị hoạt động tại một thời điểm. Ngược lại, hệ thống trong đồ án được thiết kế để tự xử lý tín hiệu chồng lấn, tách ra đặc trưng của sự kiện thực sự xảy ra và duy trì độ chính xác nhận dạng ngay cả khi tín hiệu nhiễu hoặc lẫn nhiều thiết bị.
 
 \section{Giới thiệu về NILM}
 Hệ thống NILM (Non-Intrusive Load Monitoring), hay còn gọi là giám sát tải điện không xâm lấn, là phương pháp phân tích tín hiệu điện nhằm xác định mức tiêu thụ và nhận dạng các thiết bị điện riêng lẻ trong một hệ thống chỉ dựa trên dữ liệu tổng dòng điện và điện áp đo tại một điểm duy nhất — thường là tại công tơ điện tổng.
@@ -87,7 +99,7 @@ Nguyên lý hoạt động của NILM bao gồm ba bước chính: (1) thu thậ
 NILM có nhiều ứng dụng trong nhà thông minh, hệ thống quản lý năng lượng, giám sát công nghiệp, và tối ưu hóa tiêu thụ điện. Tuy nhiên, hệ thống này vẫn tồn tại một số hạn chế như:
 \begin{itemize}
     \item Khó phân biệt các thiết bị có đặc trưng tín hiệu tương tự nhau.
-    \item  Giảm độ chính xác khi nhiều thiết bị bật/tắt cùng lúc do nhiễu và tín hiệu chồng lấn.
+    \item Giảm độ chính xác khi nhiều thiết bị bật/tắt cùng lúc do nhiễu và tín hiệu chồng lấn.
     \item Phụ thuộc vào dữ liệu huấn luyện: nếu mô hình chưa được huấn luyện với mẫu tín hiệu của thiết bị cụ thể, việc nhận dạng sẽ kém chính xác.
     \item Chưa thể thay thế hoàn toàn giải pháp cảm biến vật lý trong mọi trường hợp thực tế.
 Do đó, các hướng nghiên cứu hiện nay tập trung vào việc nâng cao khả năng phát hiện sự kiện, giảm bỏ sót và tăng độ chính xác nhận dạng, đồng thời thử nghiệm trên các nền tảng mô phỏng như Python hoặc MATLAB trước khi triển khai thực tế.
@@ -320,12 +332,6 @@ Hệ thống NILM đề xuất bao gồm các khối chức năng chính như sa
     \item Mỗi sự kiện được gán nhãn là thiết bị tương ứng gây ra biến động công suất.
 \end{itemize}
 
-\subsection{Khối hậu xử lý – kiểm tra độ tin cậy}
-\begin{itemize}
-    \item Để tăng độ tin cậy của kết quả nhận diện, hệ thống tiến hành so sánh đầu ra với mẫu tín hiệu lý tưởng (template) đã được lưu trước đó.
-    \item Nếu tín hiệu giá trị ΔP sai lệch vượt ngưỡng cho phép, kết quả nhận dạng sẽ bị loại bỏ nhằm giảm thiểu sai số và loại trừ các sự kiện giả.
-\end{itemize}
-
 \section{Ưu điểm nổi bật của hệ thống đề xuất}
 So với các nghiên cứu trước, hệ thống NILM đề xuất có nhiều ưu điểm đáng chú ý:
 
@@ -360,7 +366,8 @@ Do giới hạn trong khâu định biên sự kiện, các sự kiện bật/t�
 Trong phạm vi đồ án, dữ liệu được thu thập dưới dạng điện áp (U) và dòng điện (I) tức thời, liên tục trên mạng điện gia đình phục vụ cho bài toán NILM. Quá trình thu thập được thực hiện theo phương pháp bán thủ công, nhằm tạo ra các tập dữ liệu có chứa sự thay đổi trạng thái của thiết bị điện để phục vụ đánh giá và nhận diện sự kiện.
 
 \section{Phương pháp thu thập}
-Dữ liệu U và I được ghi nhận liên tục trong khi hệ thống đang hoạt động ở các trạng thái khác nhau của tập thiết bị gia đình. Trong mỗi lần thu thập, tôi lựa chọn một tổ hợp thiết bị đang hoạt động ổn định (ví dụ bật đèn + quạt + laptop đang sạc). Sau đó, tôi chủ động thay đổi trạng thái của một thiết bị duy nhất tại một thời điểm, chẳng hạn bật tủ lạnh, tắt sạc máy tính, hoặc bật máy sấy.
+
+Dữ liệu U và I được ghi nhận liên tục trong khi hệ thống đang hoạt động ở các trạng thái khác nhau của tập thiết bị gia đình. Trong mỗi lần thu thập, chúng tôi lựa chọn một tổ hợp thiết bị đang hoạt động ổn định (ví dụ bật đèn + quạt + laptop đang sạc). Sau đó, chúng tôi chủ động thay đổi trạng thái của một thiết bị duy nhất tại một thời điểm, chẳng hạn bật tủ lạnh, tắt sạc máy tính, hoặc bật máy sấy.
 
 Mỗi sự kiện thay đổi trạng thái thiết bị đều được thu thập theo quy trình:
 \begin{itemize}
@@ -494,7 +501,6 @@ Trong hệ thống được xây dựng, bộ lọc trung bình còn được s�
 
 \section{Thuật toán WAMMA}
 
-\raggedright
 WAMMA (Window with Adaptive Margins, Multi-window Screening, and Adaptive Threshold - Cửa sổ với lề thích ứng, sàng lọc đa cửa sổ và ngưỡng thích ứng) là một phương pháp phát hiện Sự kiện Mạnh Mẽ được đề xuất để cải thiện độ chính xác của hệ thống Giám sát Phụ tải Không Xâm lấn (NILM) dựa trên sự kiện.
 
 Thuật toán này giải quyết vấn đề cốt lõi của các phương pháp truyền thống: tính cố định của tham số. Các tham số cố định không hiệu quả khi xử lý dữ liệu công suất thực tế có biến động cao ($\sigma_{\text{local}} \uparrow$), quá trình chuyển tiếp kéo dài, hoặc sự kiện gần đồng thời.
@@ -592,6 +598,30 @@ Trong đồ án này, bộ lọc Kalman được áp dụng trước thuật to�
 
 
 \section{Thuật toán Hybrid của Mengqi Lu và Zuyi Li}
+
+Sau khi hoàn tất quá trình tiền xử lý bằng Bộ lọc Trung bình (Averaging Filter) và Bộ lọc Kalman (Kalman Filter), chúng tôi áp dụng Thuật toán Phát hiện Cơ sở (Base Detection Algorithm) – một thành phần của Thuật toán Hybrid được đề xuất bởi Mengqi Lu và Zuyi Li – lên dữ liệu đã được làm mượt. Thuật toán này xác định các sự kiện chuyển mạch dựa trên tiêu chí chênh lệch lớn giữa công suất trung bình trước và sau một điểm thời gian quan sát. Chức năng chính của phương pháp này là nâng cao khả năng phát hiện các sự kiện có biên độ nhỏ hoặc dễ bị che khuất trong môi trường có sự biến động công suất mạnh.
+
+Thuật toán Cơ sở hoạt động bằng cách tìm kiếm sự chênh lệch lớn về công suất trung bình đã ước tính ($P_{\text{estimated}}$) giữa hai cửa sổ trượt liền kề.
+
+\textbf{Tính toán Trung bình Động}
+
+Tại mỗi điểm mẫu $i$, thuật toán tính toán công suất trung bình trong hai cửa sổ trượt có kích thước $n$ mẫu:
+\begin{align*}
+Mean_{i,\text{before}} &= \frac{1}{n} \sum_{j=i-n}^{i-1} P_{\text{estimated}, j} \\
+Mean_{i,\text{after}} &= \frac{1}{n} \sum_{j=i+1}^{i+n+1} P_{\text{estimated}, j}
+\end{align*}
+\textit{Kích thước cửa sổ $n$ được chọn tương ứng với khoảng $10$ giây để tối ưu hóa độ nhạy.}
+
+\textbf{Điều Kiện Phát Hiện Sự Kiện}
+
+Một sự kiện được xác nhận tại thời điểm $i$ nếu độ chênh lệch tuyệt đối giữa hai giá trị trung bình này vượt quá ngưỡng công suất $P_{\text{th}}$:
+\begin{equation*}
+\text{Sự kiện xảy ra tại } i \text{ nếu } |Mean_{i,\text{after}} - Mean_{i,\text{before}}| > P_{\text{th}}
+\end{equation*}
+
+\textbf{Cơ Chế Giới Hạn Thời Gian (Time Limit)}
+
+Để tránh việc phát hiện một quá trình quá độ thành nhiều sự kiện nhỏ, cơ chế Giới hạn Thời gian ($T_{\text{th}}$) được áp dụng. Nếu hai sự kiện được phát hiện liên tiếp trong khoảng thời gian $\Delta t < T_{\text{th}}$ (chọn $T_{\text{th}} = 0.2$ giây theo khuyến nghị của bài báo gốc), chúng sẽ được gộp lại và coi là một sự kiện chuyển trạng thái duy nhất.
 
 \section{Đánh giá thuật toán}
 \begin{table}[h]{Bảng kết quả đánh giá thuật toán phát hiện sự kiện trên tập dữ liệu tự đo}
@@ -834,6 +864,107 @@ Từ các ví dụ minh họa, có thể thấy rằng thuật toán trích xu�
 
 \chapter{Mô hình học máy}
 
+\section{Giới thiệu}
+
+Trong hệ thống Giám sát Phụ tải Không Xâm lấn (Non-Intrusive Load Monitoring -- NILM), sau khi phát hiện được thời điểm xảy ra một sự kiện bật/tắt, nhiệm vụ quan trọng tiếp theo là xác định thiết bị nào đã tạo ra sự kiện đó. Đối với bài toán nhận dạng thiết bị trong đề tài, mô hình được sử dụng là mạng nơ-ron đa lớp (Multi-Layer Perceptron -- MLP) với tập đặc trưng đầu vào bao gồm ảnh đặc trưng I--V và giá trị công suất trung bình của thiết bị.
+
+MLP là một mô hình học máy có cấu trúc đơn giản nhưng mang lại hiệu quả cao đối với các bài toán phân loại có đầu vào dạng vector cố định. Trong bối cảnh của đề tài, ảnh đặc trưng I--V được chuyển đổi thành dạng ma trận và làm phẳng (flatten) thành vector, sau đó kết hợp với giá trị công suất trung bình $P_{\mathrm{mean}}$. Việc biểu diễn như vậy cho phép mô hình học được sự khác biệt đặc trưng giữa các thiết bị điện dựa trên hành vi tiêu thụ của chúng.
+
+Nhờ đặc điểm gọn nhẹ, tốc độ suy luận nhanh và khả năng triển khai trong thời gian thực, MLP trở thành lựa chọn phù hợp cho bài toán phân loại thiết bị trong hệ thống NILM của đề tài. Phần này sẽ trình bày chi tiết quy trình xây dựng đặc trưng đầu vào, kiến trúc mô hình, phương pháp huấn luyện và đánh giá, qua đó làm rõ vai trò của mô hình MLP trong toàn bộ hệ thống nhận dạng thiết bị.
+
+\section{Đầu vào của mô hình}
+
+Đầu vào của mô hình MLP trong đề tài bao gồm hai loại đặc trưng được xử lý thông qua hai nhánh mạng riêng biệt: (1) ảnh đặc trưng I--V và (2) giá trị công suất $P$ của thiết bị tại thời điểm xảy ra sự kiện bật/tắt. Cả hai đặc trưng này đều được trích xuất từ khối tiền xử lý và trích xuất đặc trưng.
+
+Ảnh I--V được xây dựng dựa trên mối quan hệ giữa dòng điện và điện áp khi thiết bị thay đổi trạng thái. Sau giai đoạn tiền xử lý, dữ liệu được ánh xạ thành ảnh kích thước $32 \times 32$, biểu diễn dạng phân bố đặc trưng của thiết bị. Ảnh được chuẩn hoá và làm phẳng (flatten) thành một vector một chiều trước khi đưa vào nhánh xử lý ảnh của mô hình, tạo ra vector đặc trưng $f_{\mathrm{img}} \in \mathrm{R}^{64}$.
+
+Giá trị công suất $P$ của thiết bị tại thời điểm xảy ra sự kiện được đưa vào nhánh mạng thứ hai. Sau hai lớp fully-connected, đặc trưng này được biểu diễn dưới dạng vector $f_{P} \in \mathrm{R}^{16}$.
+
+Cuối cùng, hai vector đặc trưng được ghép lại bằng phép nối:
+\[
+x = [f_{\mathrm{img}},\; f_{P}] \in \mathrm{R}^{80},
+\]
+và được đưa vào bộ phân loại cuối cùng để xác định thiết bị tương ứng.
+
+
+\section{Kiến trúc mô hình MLP}
+
+Mô hình MLP được thiết kế nhằm phân loại thiết bị dựa trên hai loại đặc trưng: ảnh I--V và giá trị công suất $P$. Mô hình có cấu trúc gồm ba phần chính: nhánh xử lý ảnh, nhánh xử lý công suất, và bộ phân loại kết hợp.
+
+\begin{figure}[H]{Kiến trúc mô hình MLP được sử dụng}
+    \centering
+    \includegraphics[width=0.8\linewidth]{IMAGE/kientrucmlp.jpg}
+\end{figure}
+
+\subsection{Nhánh xử lý ảnh I--V}
+
+Nhánh này nhận đầu vào là ảnh I--V đã được làm phẳng (flatten) thành vector một chiều có kích thước $32 \times 32 = 1024$. Nhánh xử lý ảnh gồm bốn lớp fully-connected liên tiếp với hàm kích hoạt ReLU:
+
+\begin{itemize}
+    \item Lớp 1: 1024 $\rightarrow$ 512 neuron
+    \item Lớp 2: 512 $\rightarrow$ 256 neuron
+    \item Lớp 3: 256 $\rightarrow$ 128 neuron
+    \item Lớp 4: 128 $\rightarrow$ 64 neuron
+\end{itemize}
+
+Sau nhánh này, ảnh I--V được biểu diễn dưới dạng vector đặc trưng $f_{\mathrm{img}} \in \mathbb{R}^{64}$.
+
+\subsection{Nhánh xử lý giá trị công suất}
+
+Nhánh này nhận đầu vào là giá trị công suất $P$ của thiết bị tại thời điểm sự kiện. Nhánh gồm hai lớp fully-connected với ReLU:
+
+\begin{itemize}
+    \item Lớp 1: 1 $\rightarrow$ 32 neuron
+    \item Lớp 2: 32 $\rightarrow$ 16 neuron
+\end{itemize}
+
+Kết quả là vector đặc trưng $f_P \in \mathbb{R}^{16}$.
+
+\subsection{Bộ phân loại kết hợp}
+
+Hai vector đặc trưng $f_{\mathrm{img}}$ và $f_P$ được ghép nối thành vector $x \in \mathbb{R}^{80}$:
+\[
+x = [f_{\mathrm{img}},\; f_P]
+\]
+
+Vector $x$ được đưa vào bộ phân loại gồm hai lớp fully-connected với ReLU:
+
+\begin{itemize}
+    \item Lớp 1: 80 $\rightarrow$ 32 neuron
+    \item Lớp 2: 32 $\rightarrow$ $C$ neuron (số lớp bằng số thiết bị cần phân loại)
+\end{itemize}
+
+Lớp đầu ra trả về vector logits, sau đó có thể áp dụng softmax để tính xác suất dự đoán thiết bị.
+
+\subsection{Tóm tắt kiến trúc}
+
+Như vậy, kiến trúc MLP gồm hai nhánh độc lập xử lý ảnh I--V và công suất $P$, sau đó hợp nhất vector đặc trưng và đưa vào bộ phân loại. Cấu trúc này giúp mô hình học được đặc trưng riêng của từng loại dữ liệu, đồng thời kết hợp thông tin để phân loại chính xác các thiết bị.
+
+\subsection{Hàm mất mát và tối ưu}
+
+Mô hình MLP được huấn luyện để phân loại thiết bị sử dụng Categorical Cross-Entropy làm hàm mất mát:
+\[
+\mathcal{L} = - \sum_{i=1}^{C} y_i \log(\hat{y}_i),
+\]
+trong đó $C$ là số lớp (số thiết bị), $y_i$ là nhãn thật và $\hat{y}_i$ là xác suất dự đoán từ mô hình.
+
+Mô hình được tối ưu bằng thuật toán Adam với learning rate $1 \times 10^{-3}$, huấn luyện trong 15 epoch với batch size 32, lựa chọn này giúp mạng học hiệu quả đặc trưng từ cả ảnh I--V và giá trị công suất $P$ đồng thời hạn chế tình trạng overfit.
+
+\section{Quy trình huấn luyện}
+
+Quy trình huấn luyện mô hình MLP bao gồm các bước chính sau:
+
+\begin{enumerate}
+    \item \textbf{Chuẩn hóa dữ liệu:} Ảnh I--V được chuẩn hóa và làm phẳng thành vector một chiều, trong khi giá trị công suất $P$ cũng được chuẩn hóa, đảm bảo các đặc trưng đầu vào cùng thang đo phù hợp cho mạng MLP.
+    
+    \item \textbf{Chia tập dữ liệu:} Tập huấn luyện được tạo từ các thiết bị hoạt động độc lập (mỗi thiết bị bật một mình), giúp mạng học chính xác đặc trưng của từng thiết bị. Tập kiểm tra (test) được tạo từ các sự kiện thay đổi trạng thái thiết bị trong môi trường có 0 hoặc nhiều thiết bị khác đang bật, nhằm đánh giá khả năng phân loại trong tình huống thực tế. Dữ liệu cũng được chia thành tập train và validation để theo dõi quá trình huấn luyện và điều chỉnh tham số.
+    
+    \item \textbf{Huấn luyện theo batch:} Mạng được huấn luyện theo batch với batch size = 32, sử dụng hàm mất mát Categorical Cross-Entropy và optimizer Adam với learning rate $1 \times 10^{-3}$. Quá trình huấn luyện kéo dài 15 epoch, đảm bảo mạng học hiệu quả đặc trưng từ cả ảnh I--V và công suất $P$ đồng thời hạn chế overfit.
+    
+    \item \textbf{Lưu mô hình:} Sau mỗi epoch, trạng thái mô hình và optimizer được lưu lại (checkpoint) để có thể tiếp tục huấn luyện nếu cần. Sau khi huấn luyện kết thúc, mô hình cuối cùng và bộ mã hóa nhãn (label encoder) được lưu để sử dụng cho dự đoán thiết bị.
+\end{enumerate}
+
+
 \chapter{Kết quả và đánh giá hệ thống}
 
 \section{Dữ liệu đánh giá}
@@ -925,10 +1056,12 @@ Tổng số sự kiện cần nhận diện: 116 sự kiện
     \item Percision: 99\%
     \item Accuracy: 98.75\%
 \end{itemize}
+
 \begin{figure}[H]{Kết quả phân loại sử dụng thuật toán Hybrid của Mengqi Lu và Zuyi Li chỉ xét đến mô hình}
     \centering
     \includegraphics[width=0.8\linewidth]{IMAGE/ket_qua_he_thong/image11.png}
 \end{figure}
+
 \textbf{Kết quả đánh giá toàn bộ hệ thống}
 \begin{itemize}
     \item F1 Score: 73\%
