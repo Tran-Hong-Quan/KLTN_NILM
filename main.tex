@@ -1253,7 +1253,7 @@ Chạy thử thuật toán trên một số thiết bị cho kết quả như sa
     \includegraphics[width=0.9\linewidth]{IMAGE/Ket_qua_thuat_toan_tao_anh/image8.png}
 \end{figure}
 
-\textbf{Nhận xét}
+\section{Nhận xét kết quả}
 
 Từ các kết quả thử nghiệm, có thể nhận thấy rằng khi thiết bị hoạt động độc lập và không có sự chồng chéo giữa các tín hiệu, thuật toán tạo ảnh cho ra kết quả khá tương đồng với ảnh gốc (ảnh không qua xử lý). Các đặc trưng chính như biên dạng dòng điện theo chu kỳ, mức độ biến thiên theo thời gian và hình dáng tổng quát của dạng sóng đều được bảo toàn. Tuy nhiên, do bản chất của quá trình lấy trung bình theo chu kỳ, một số chi tiết biên nhỏ hoặc các đoạn có biến thiên nhanh bị làm mờ nhẹ. Điều này là kết quả tất yếu khi ưu tiên giảm nhiễu và thu được dạng sóng đại diện ổn định.
 
@@ -1511,7 +1511,7 @@ Trước hết, thuật toán WAMMA thể hiện nhiều hạn chế khi chỉ p
 
 Thuật toán Hybrid của Mengqi Lu và Zuyi Li cho thấy sự cải thiện rõ rệt khi nâng tỷ lệ phát hiện lên gần 70\%. Tuy nhiên, việc vẫn bỏ lỡ hơn 30\% sự kiện cùng với 9 sự kiện giả khiến hiệu suất end-to-end chỉ đạt 67.52\%. Điều này cho thấy mặc dù Hybrid ổn định hơn WAMMA, nhưng vẫn chưa đạt độ tin cậy cần thiết để triển khai trong bối cảnh thực tế có nhiều thiết bị hoạt động đồng thời.
 
-Thuật toán đề xuất trong đề tài đạt kết quả nổi bật nhất khi phát hiện đầy đủ 116/116 sự kiện (100\%), đảm bảo không bỏ sót bất cứ sự kiện nào -- yếu tố then chốt trong các hệ thống NILM hướng sự kiện. Nhờ đảm bảo tính đầy đủ của dữ liệu đầu vào, mô hình phân loại duy trì hiệu suất ổn định và hệ thống không bị đứt gãy dòng sự kiện. Tuy nhiên, thuật toán vẫn sinh ra 9 sự kiện giả, chủ yếu do nhiễu tín hiệu trong quá trình thiết bị CVD thay đổi công suất hoặc do ngưỡng phát hiện chưa được tối ưu cho các thiết bị có profile đặc thù.
+Thuật toán đề xuất trong đề tài đạt kết quả nổi bật nhất khi phát hiện đầy đủ 116/116 sự kiện (100\%), đảm bảo không bỏ sót bất cứ sự kiện nào -- yếu tố then chốt trong các hệ thống NILM hướng sự kiện. Nhờ đảm bảo tính đầy đủ của dữ liệu đầu vào, mô hình phân loại duy trì hiệu suất ổn định và hệ thống không bị đứt gãy dòng sự kiện. Tuy nhiên, thuật toán vẫn sinh ra 9 sự kiện giả, chủ yếu do nhiễu tín hiệu trong quá trình thiết bị CVD thay đổi công suất hoặc do ngưỡng phát hiện chưa được tối ưu cho các thiết bị có đặc trưng đặc thù.
 
 Mặc dù tồn tại các sự kiện giả, hệ thống sử dụng thuật toán đề xuất đạt hiệu suất tổng thể cao nhất với Accuracy 88.8\%, Recall 89\% và F1-Score 84\%. Điều này chứng minh hiệu quả của cách tiếp cận ưu tiên không bỏ sót sự kiện (high-recall strategy), một yêu cầu quan trọng đối với các ứng dụng giám sát thiết bị theo thời gian thực, phân tích phụ tải, hay tối ưu hóa năng lượng.
 
