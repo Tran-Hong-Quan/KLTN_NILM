@@ -982,7 +982,7 @@ Ngược lại, các cấu hình lấy mẫu cao như WAMMA\_1 và MLZL\_1 giúp
 
 Một điểm đáng chú ý khác là sự đánh đổi giữa TPP và FPP xuất hiện xuyên suốt tất cả các cấu hình. Khi thuật toán tăng độ nhạy (giảm ngưỡng hoặc tăng tần số lấy mẫu), TPP thường tăng nhưng FPP cũng tăng theo. Khi giảm độ nhạy (ngưỡng cao hoặc lấy mẫu thấp), FPP giảm nhưng dễ bỏ sót sự kiện, làm tăng FNN. Đây là đặc tính chung của hầu hết các bộ phát hiện sự kiện dựa trên biên độ công suất.
 
-Thuật toán đề xuất đạt TPP = 100\%, tức không bỏ lỡ bất kỳ sự kiện nào (FNN = 0\%). Kết quả này cho thấy hệ lai ghép (kết hợp WAMMA + Low-Decrease + các ràng buộc thời gian) đã khắc phục tốt hạn chế của từng phương pháp gốc. Cụ thể:
+Thuật toán đề xuất đạt TPP = 100\%, tức không bỏ lỡ bất kỳ sự kiện nào (FNN = 0\%). Kết quả này cho thấy hệ lai ghép (kết hợp WAMMA + Low-Dec + các ràng buộc thời gian) đã khắc phục tốt hạn chế của từng phương pháp gốc. Cụ thể:
 
 \begin{itemize}
     \item WAMMA xử lý tốt các sự kiện lớn hoặc có biên dạng rõ ràng.
