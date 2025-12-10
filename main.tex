@@ -126,23 +126,13 @@ Mỗi hướng có triết lý khác nhau về cách xử lý tín hiệu:
 \subsection{Hướng tiếp cận liên tục (Continuous-based)}
 
 \textbf{Nguyên lý hoạt động:}
-
 Hệ thống theo hướng này sẽ phân tích toàn bộ chuỗi tín hiệu tổng (dòng điện, điện áp, công suất tức thời, v.v.) trong suốt thời gian hoạt động. Dữ liệu được thu thập liên tục và đưa vào mô hình xử lý để dự đoán trạng thái bật/tắt của từng thiết bị tại mỗi thời điểm. Quá trình này đòi hỏi mô hình có khả năng học và theo dõi sự biến đổi liên tục của tín hiệu trong thời gian thực.
 
-\textbf{Đặc điểm nổi bật:}
+\textbf{Đặc điểm nổi bật:} 
+Phương pháp này cho phép mô hình dự đoán một cách chi tiết và liên tục trạng thái của từng thiết bị, đồng thời có khả năng học được các hành vi tiêu thụ dài hạn cũng như các dạng sóng phức tạp đặc trưng cho từng loại thiết bị.
 
-\begin{itemize}
-    \item Cho phép dự đoán chi tiết và liên tục trạng thái của từng thiết bị.
-    \item Có thể học được hành vi tiêu thụ dài hạn hoặc các dạng sóng phức tạp của thiết bị.
-\end{itemize}
-
-\textbf{Nhược điểm:}
-
-\begin{itemize}
-    \item Cần dữ liệu huấn luyện có gán nhãn chi tiết theo thời gian, điều này khiến việc thu thập dữ liệu trở nên khó khăn và tốn công.
-    \item Khối lượng tính toán lớn, khó triển khai trên thiết bị nhúng hoặc trong hệ thống cần giám sát nhiều thiết bị cùng lúc.
-    \item Mô hình cần học tất cả các tổ hợp bật/tắt khả dĩ giữa các thiết bị, khiến chi phí huấn luyện tăng theo cấp số nhân khi số thiết bị tăng.
-\end{itemize}
+\textbf{Nhược điểm:} 
+Phương pháp này cũng tồn tại một số hạn chế. Trước hết, hệ thống yêu cầu dữ liệu huấn luyện phải được gán nhãn chi tiết theo thời gian, dẫn đến quá trình thu thập dữ liệu trở nên khó khăn và tốn nhiều công sức. Bên cạnh đó, khối lượng tính toán lớn khiến việc triển khai trên thiết bị nhúng hoặc trong các hệ thống phải giám sát đồng thời nhiều thiết bị trở nên kém hiệu quả. Cuối cùng, mô hình cần học toàn bộ các tổ hợp bật/tắt có thể xảy ra giữa các thiết bị, khiến chi phí huấn luyện tăng nhanh theo cấp số nhân khi số lượng thiết bị tăng.
 
 \textbf{Ví dụ:}
 Nếu hệ thống có 3 thiết bị gồm đèn (500W), máy lạnh (1000W) và bơm nước (1500W), 
@@ -155,33 +145,18 @@ phức tạp và khó khả thi trong thực tế.
 
 \textbf{Nguyên lý hoạt động:}
 
-\begin{itemize}
-    \item Phát hiện sự kiện:
-\end{itemize}
+Quy trình gồm ba bước chính. Trước hết, hệ thống thực hiện phát hiện sự kiện bằng cách xác định các thời điểm có sự thay đổi trạng thái của thiết bị dựa trên biến động công suất tức thời, thường được kiểm tra thông qua một ngưỡng \(\Delta P\). Những điểm có mức thay đổi lớn được xem như ứng viên cho sự kiện bật hoặc tắt.
 
-Xác định các thời điểm xảy ra sự thay đổi trạng thái của thiết bị dựa trên biến động công suất tức thời (thường sử dụng ngưỡng ∆P). Các điểm có mức thay đổi lớn được xem là ứng viên sự kiện bật hoặc tắt.
+Tiếp theo, với mỗi sự kiện được phát hiện, hệ thống tiến hành trích xuất đặc trưng bằng cách lấy một đoạn tín hiệu ngắn trước và sau thời điểm xảy ra sự kiện. Các đặc trưng thu được có thể bao gồm độ biến thiên công suất, gradient, dạng sóng tín hiệu hoặc các biến đổi liên quan khác phản ánh hành vi của thiết bị trong quá trình chuyển trạng thái.
 
-\begin{itemize}
-    \item Trích xuất đặc trưng quanh sự kiện:
-\end{itemize}
+Cuối cùng, mô hình máy học sử dụng các đặc trưng này để phân loại sự kiện, nhằm xác định loại thiết bị đã gây ra thao tác bật hoặc tắt đó.
 
-Từ mỗi sự kiện được phát hiện, tiến hành lấy một đoạn tín hiệu ngắn trước và sau thời điểm xảy ra sự kiện để xây dựng đặc trưng. Các đặc trưng có thể bao gồm: độ biến thiên công suất, gradient, dạng sóng tín hiệu (waveform), hoặc các biến đổi liên quan.
+\textbf{Ưu điểm của phương pháp:}
 
-\begin{itemize}
-    \item Phân loại sự kiện:
-\end{itemize}
-Mô hình máy học sẽ nhận các đặc trưng này và dự đoán thiết bị tương ứng gây ra sự kiện bật/tắt.
-
-\textbf{Ưu điểm của phương pháp}
-
-\begin{itemize}
-    \item Không yêu cầu gán nhãn toàn bộ chuỗi tín hiệu, chỉ cần gán nhãn tại thời điểm bật/tắt, giúp giảm đáng kể chi phí thu thập và xử lý dữ liệu.
-    \item Tập trung vào thông tin quan trọng nhất, cụ thể là thời điểm có thay đổi trạng thái, từ đó nâng cao hiệu quả của mô hình phân loại.
-\end{itemize}
+Phương pháp này không yêu cầu gán nhãn toàn bộ chuỗi tín hiệu mà chỉ cần gán nhãn tại các thời điểm bật hoặc tắt, giúp giảm đáng kể chi phí thu thập và chuẩn bị dữ liệu. Ngoài ra, việc tập trung vào các thời điểm có thay đổi trạng thái — vốn chứa nhiều thông tin quan trọng nhất — cho phép mô hình phân loại hoạt động hiệu quả hơn và tránh được nhiễu trong các đoạn tín hiệu không có sự kiện.
 
 \subsection{So sánh hai hướng tiếp cận trong NILM}
-
-\begin{table}[h]{So sánh giữa Continuous-based NILM và Event-based NILM}
+\begin{table}[H]{So sánh giữa Continuous-based NILM và Event-based NILM}
     \centering
     \begin{tabularx}{\linewidth}{|X|X|X|}
         \hline
@@ -192,7 +167,7 @@ Mô hình máy học sẽ nhận các đặc trưng này và dự đoán thiết
         & Chỉ phân tích các sự kiện bật/tắt thiết bị \\ \hline
 
         Tín hiệu đầu vào 
-        & Chuỗi tín hiệu liên tục: $P(t)$, $I(t)$, ... 
+        & Chuỗi tín hiệu liên tục: $P(t)$, $I(t)$, \ldots 
         & Đoạn tín hiệu ngắn quanh thời điểm sự kiện \\ \hline
 
         Yêu cầu dữ liệu gán nhãn 
@@ -204,69 +179,26 @@ Mô hình máy học sẽ nhận các đặc trưng này và dự đoán thiết
         & Dễ mở rộng vì chỉ xử lý các điểm quan trọng \\ \hline
 
         Phù hợp cho hệ thống thực tế 
-        & Hạ tầng có số lượng thiết bị giới hạn 
-        & Hạ tầng có nhiều thiết bị, ưu tiên thời điểm bật/tắt \\ \hline
+        & Hệ thống có số lượng thiết bị giới hạn 
+        & Hệ thống có nhiều thiết bị và ưu tiên theo dõi thời điểm bật/tắt \\ \hline
 
         Hạn chế chính 
         & Khó huấn luyện và khó mở rộng mô hình 
-        & Có thể bỏ sót sự kiện hoặc gặp sự kiện trùng lặp gây nhầm lẫn \\ \hline
+        & Có nguy cơ bỏ sót sự kiện hoặc gặp trùng lặp gây nhầm lẫn \\ \hline
     \end{tabularx}
 \end{table}
 
 \textbf{Hướng Continuous-based (phân tích liên tục)}
 
-Ở hướng tiếp cận này, mô hình phải học và nhận diện toàn bộ các tổ hợp trạng thái có thể xảy ra của tất cả thiết bị trong hệ thống.
-
-Ví dụ minh họa, giả sử có 3 thiết bị:
-
-\begin{itemize}
-    \item Đèn (500W)
-    \item Máy lạnh (1000W)
-    \item Bơm nước (1500W)
-\end{itemize}
-
-Khi đó sẽ có tổng cộng $2^3=8$ tổ hợp bật/tắt (chỉ đèn bật, đèn + máy lạnh bật, chỉ bơm bật, ...). Nếu thêm một thiết bị thứ tư, số tổ hợp tăng lên thành $2^4=16$
-
-Điều này dẫn đến hệ quả:
-
-\begin{itemize}
-    \item Khi thêm thiết bị mới, mô hình cần được huấn luyện lại để học toàn bộ tổ hợp mới.
-    \item Khi xuất hiện thiết bị lạ (chưa từng thấy trong quá trình huấn luyện), mô hình dễ bị sai lệch.
-    \item Việc huấn luyện trở nên phức tạp khi số lượng thiết bị lớn, gây khó khăn khi triển khai trong các thiết bị nhúng hoặc hệ thống có tài nguyên hạn chế.
-\end{itemize}
+Trong hướng tiếp cận này, mô hình được yêu cầu học và nhận diện toàn bộ các tổ hợp trạng thái có thể xảy ra của tất cả thiết bị trong hệ thống. Chẳng hạn, với ba thiết bị như đèn (500W), máy lạnh (1000W) và bơm nước (1500W), hệ thống sẽ tồn tại tám tổ hợp bật/tắt khác nhau theo quy luật $2^n$. Khi số thiết bị tăng thêm, số tổ hợp cũng tăng theo cấp số nhân. Điều này dẫn đến nhiều hệ quả quan trọng: mô hình phải huấn luyện lại mỗi khi có thiết bị mới; sự xuất hiện của thiết bị lạ dễ gây sai lệch; và quá trình huấn luyện trở nên phức tạp khi số thiết bị lớn, gây khó khăn cho việc triển khai trong môi trường tài nguyên hạn chế.
 
 \textbf{Hướng Event-based (phân tích theo sự kiện)}
 
-Trong hướng tiếp cận này, hệ thống chỉ phân tích tín hiệu trong khoảng thời gian xảy ra sự kiện bật hoặc tắt.
-
-Các đặc điểm chính:
-
-\begin{itemize}
-    \item Mỗi thiết bị chỉ cần một mô hình phân loại tại thời điểm nó thay đổi trạng thái.
-    \item  Không cần xét các tổ hợp thiết bị bật cùng lúc.
-\end{itemize}
-
-Ví dụ:
-
-Khi đèn bật, hệ thống chỉ cần phân tích tín hiệu tại thời điểm xuất hiện sự kiện để xác định xem đó có phải là “đèn” hay không, mà không cần tính đến trạng thái của máy lạnh hay bơm nước.
-
-Ưu điểm đáng chú ý:
-
-\begin{itemize}
-    \item Khi thêm thiết bị mới, chỉ cần huấn luyện mô hình cho thiết bị đó mà không ảnh hưởng đến các mô hình cũ.
-    \item Nếu có thiết bị lạ xuất hiện, hệ thống có thể coi là sự kiện không hợp lệ hoặc sự kiện nhiễu mà không gây ảnh hưởng lớn.
-\end{itemize}
+Trái ngược với cách tiếp cận liên tục, phương pháp này chỉ tập trung vào tín hiệu tại thời điểm xảy ra sự kiện bật hoặc tắt. Mỗi thiết bị chỉ cần một mô hình để phân loại sự kiện khi nó thay đổi trạng thái và không cần xét đến các tổ hợp bật/tắt đồng thời giữa nhiều thiết bị. Ví dụ, khi đèn bật, hệ thống chỉ phân tích tín hiệu tại thời điểm đó để xác định xem sự kiện có thuộc về đèn hay không mà không phụ thuộc vào trạng thái của máy lạnh hoặc bơm nước. Phương pháp này đặc biệt thuận lợi khi thêm thiết bị mới, bởi việc huấn luyện chỉ áp dụng cho thiết bị đó. Đối với thiết bị lạ, hệ thống có thể coi sự kiện phát sinh là nhiễu mà không ảnh hưởng đến các mô hình đã có.
 
 \textbf{Lưu ý khi lựa chọn hướng tiếp cận}
 
-Mặc dù phương pháp dựa trên sự kiện có ưu điểm về tính nhẹ và khả năng mở rộng, nó vẫn tồn tại rủi ro nếu bỏ sót sự kiện hoặc phân loại nhầm, dẫn đến tích lũy sai số theo thời gian.
-
-Do đó, lựa chọn phương pháp phù hợp phụ thuộc vào mục tiêu ứng dụng:
-
-\begin{itemize}
-    \item Nếu hệ thống chỉ cần theo dõi một số thiết bị cố định, ít thay đổi: Phương pháp phân tích liên tục có thể phù hợp hơn vì theo dõi chi tiết và liên tục toàn bộ tín hiệu.
-    \item Nếu hệ thống phải giám sát nhiều thiết bị, hoặc số lượng thiết bị có thể thay đổi linh hoạt: Phương pháp dựa trên sự kiện là lựa chọn tốt nhờ khả năng mở rộng, đơn giản hóa việc huấn luyện.
-\end{itemize}
+Mặc dù phương pháp dựa trên sự kiện có ưu thế rõ rệt về khả năng mở rộng và tính nhẹ, nó vẫn tiềm ẩn rủi ro tích lũy sai số nếu xuất hiện tình trạng bỏ sót hoặc phân loại sai sự kiện. Việc lựa chọn phương pháp phụ thuộc chặt chẽ vào mục tiêu của hệ thống. Nếu hệ thống chỉ cần theo dõi một số thiết bị cố định và ít thay đổi, phương pháp phân tích liên tục có thể phù hợp hơn vì nó mô tả chi tiết toàn bộ tín hiệu. Ngược lại, trong môi trường có nhiều thiết bị hoặc thường xuyên thay đổi, cách tiếp cận dựa trên sự kiện mang lại lợi thế nhờ khả năng mở rộng linh hoạt và giảm chi phí huấn luyện.
 
 
 \section{Đặt vấn đề}
@@ -287,37 +219,23 @@ Chính vì vậy, đề tài đô án này tập trung vào việc nghiên cứu
 
 
 \section{Mục tiêu nghiên cứu}
-Đề tài được thực hiện nhằm xây dựng, kiểm thử và đánh giá một hệ thống NILM theo hướng sự kiện (Event-based NILM) có khả năng vận hành ổn định trong điều kiện thực tế, nơi tín hiệu điện chịu ảnh hưởng bởi nhiễu, dao động phụ tải. Các mục tiêu cụ thể của nghiên cứu bao gồm:
-\begin{itemize}
-    \item Xây dựng phương pháp phát hiện sự kiện bật/tắt của thiết bị dựa trên tín hiệu điện tổng thu thập từ hệ thống thực, đảm bảo xác định đúng thời điểm thay đổi trạng thái của thiết bị ngay cả trong môi trường chứa nhiều nhiễu và nhiều thiết bị hoạt động đồng thời.
-    \item Giảm thiểu tỉ lệ bỏ sót sự kiện (missed events) và hạn chế nhiễu giả (false events) thông qua việc đề xuất hoặc điều chỉnh các thuật toán xử lý tín hiệu, nhằm nâng cao độ ổn định và độ tin cậy của quá trình phát hiện sự kiện.
-    \item Thực hiện nhận dạng thiết bị dựa trên các đặc trưng tín hiệu trích xuất từ dữ liệu đo thực, bao gồm công suất tức thời, dạng sóng dòng điện, điện áp và các đặc trưng thống kê hoặc miền tần số; từ đó phân loại và nhận dạng thiết bị một cách chính xác hơn trong điều kiện tín hiệu thực nghiệm phức tạp.
-    \item Xây dựng và công bố một bộ dữ liệu thực nghiệm mới gồm tín hiệu điện áp và dòng điện tức thời của nhiều thiết bị gia dụng trong các sự kiện bật/tắt. Bộ dữ liệu được thu thập trong điều kiện lưới điện Việt Nam, đóng vai trò như một nền tảng đánh giá cho các phương pháp NILM hướng sự kiện và góp phần khắc phục sự thiếu hụt dữ liệu bản địa so với các bộ dữ liệu quốc tế như PLAID.
-    \item Triển khai, mô phỏng và kiểm thử toàn bộ thuật toán trên môi trường phần mềm (Python) theo phương thức xử lý ngoại tuyến (offline processing), bao gồm trực quan hóa tín hiệu, phân tích đặc trưng và đánh giá hiệu năng thuật toán nhằm kiểm chứng tính khả thi và độ chính xác của hệ thống.
-    \item Định hướng phát triển ứng dụng trong thực tế, làm tiền đề cho việc triển khai hệ thống NILM tại các hộ gia đình hoặc các mô hình quản lý năng lượng thông minh trong tương lai, góp phần nâng cao hiệu quả sử dụng năng lượng và hỗ trợ người dùng theo dõi phụ tải một cách chi tiết mà không cần sử dụng cảm biến riêng lẻ cho từng thiết bị.
-\end{itemize}
+Đề tài được thực hiện với mục tiêu xây dựng, kiểm thử và đánh giá một hệ thống NILM theo hướng sự kiện (Event-based NILM) có khả năng vận hành ổn định trong điều kiện thực tế, nơi tín hiệu điện thường bị ảnh hưởng bởi nhiễu và sự dao động của phụ tải. Nghiên cứu tập trung trước hết vào việc phát triển phương pháp phát hiện chính xác thời điểm bật hoặc tắt của thiết bị dựa trên tín hiệu điện tổng thu thập từ hệ thống thực, ngay cả khi nhiều thiết bị hoạt động đồng thời và môi trường chứa nhiều nhiễu. 
+
+Bên cạnh đó, đề tài hướng đến việc giảm thiểu tỷ lệ bỏ sót sự kiện và hạn chế tối đa các sự kiện giả thông qua việc đề xuất hoặc điều chỉnh các thuật toán xử lý tín hiệu, qua đó nâng cao độ ổn định và độ tin cậy của quá trình phát hiện sự kiện. Tiếp theo, nghiên cứu thực hiện nhận dạng thiết bị dựa trên các đặc trưng tín hiệu được trích xuất từ dữ liệu đo thực như công suất tức thời, dạng sóng dòng điện, điện áp nhằm tăng độ chính xác của quá trình phân loại trong điều kiện tín hiệu thực nghiệm phức tạp.
+
+Một đóng góp quan trọng của đề tài là xây dựng và công bố một bộ dữ liệu thực nghiệm mới, bao gồm tín hiệu điện áp và dòng điện tức thời của nhiều thiết bị gia dụng trong các sự kiện bật và tắt. Bộ dữ liệu được thu thập trong điều kiện lưới điện Việt Nam, tạo ra một nền tảng đánh giá phù hợp cho các phương pháp NILM hướng sự kiện và góp phần khắc phục sự thiếu hụt dữ liệu bản địa so với những bộ dữ liệu quốc tế như PLAID.
+
+Toàn bộ thuật toán được triển khai, mô phỏng và kiểm thử trong môi trường Python theo hướng xử lý ngoại tuyến, bao gồm trực quan hóa tín hiệu, phân tích đặc trưng và đánh giá hiệu năng để kiểm chứng tính khả thi và độ chính xác của hệ thống. Cuối cùng, nghiên cứu đề xuất các hướng phát triển ứng dụng thực tế, mở ra khả năng triển khai hệ thống NILM trong hộ gia đình hoặc các mô hình quản lý năng lượng thông minh trong tương lai, từ đó góp phần nâng cao hiệu quả sử dụng năng lượng và cho phép người dùng theo dõi phụ tải chi tiết mà không cần trang bị cảm biến riêng lẻ cho từng thiết bị.
+
 
 \section{Phạm vi nghiên cứu}
 
-Phạm vi của đề tài tập trung vào việc xây dựng, triển khai và đánh giá hệ thống NILM theo hướng sự kiện dựa trên dữ liệu đo thực nghiệm. Nghiên cứu chỉ xem xét việc xử lý và phân tích tín hiệu dưới dạng ngoại tuyến (offline), không bao gồm việc triển khai trên phần cứng đo lường thời gian thực hoặc các hệ thống IoT tích hợp.
+Phạm vi của đề tài tập trung vào việc xây dựng, triển khai và đánh giá một hệ thống NILM theo hướng sự kiện dựa trên dữ liệu đo thực nghiệm. Toàn bộ quá trình phân tích được thực hiện dưới dạng xử lý ngoại tuyến (offline); đề tài không xem xét việc triển khai trên phần cứng đo lường thời gian thực hay các hệ thống IoT tích hợp. Dữ liệu sử dụng được thu thập trực tiếp từ nhiều thiết bị điện gia dụng trong các sự kiện bật và tắt, bao gồm tín hiệu điện áp và dòng điện tức thời. Những tín hiệu này được xử lý trong môi trường Python nhằm phục vụ việc trích xuất đặc trưng, phát hiện sự kiện và nhận dạng thiết bị.
 
-Dữ liệu sử dụng trong đồ án được thu thập trực tiếp từ nhiều thiết bị điện gia dụng trong các sự kiện bật/tắt, bao gồm tín hiệu điện áp và dòng điện tức thời. Các tín hiệu này được xử lý trong môi trường lập trình Python nhằm trích xuất đặc trưng, phát hiện sự kiện và nhận dạng thiết bị.
+Trong giới hạn nghiên cứu, đề tài tập trung trước hết vào việc phát hiện các sự kiện bật hoặc tắt thiết bị từ tín hiệu điện tổng trong điều kiện có nhiễu và nhiều phụ tải hoạt động cùng lúc. Bên cạnh đó, nghiên cứu tiến hành trích xuất đặc trưng và nhận dạng thiết bị dựa trên tín hiệu dòng điện và điện áp đo được tại các thời điểm chuyển trạng thái. Hệ thống sau đó được đánh giá thông qua các thí nghiệm ngoại tuyến, bao gồm khả năng phát hiện sự kiện và độ chính xác trong nhận dạng thiết bị.
 
-Trong giới hạn nghiên cứu, đề tài tập trung vào các nội dung chính sau:
+Một số hướng nghiên cứu liên quan nhưng không nằm trong phạm vi của đề tài bao gồm việc ước lượng năng lượng tiêu thụ dài hạn hoặc phân rã công suất liên tục theo thời gian; tối ưu hóa chuyên sâu các mô hình học máy hoặc triển khai các mô hình phức tạp yêu cầu dữ liệu lớn; và tích hợp hệ thống vào phần cứng đo đạc thời gian thực hoặc các nền tảng IoT hay embedded.
 
-\begin{itemize}
-    \item Phát hiện sự kiện bật/tắt của thiết bị từ tín hiệu điện tổng trong điều kiện có nhiễu và nhiều phụ tải hoạt động đồng thời.
-    \item Trích xuất đặc trưng và nhận dạng thiết bị dựa trên dữ liệu dòng điện và điện áp được đo trong các sự kiện chuyển trạng thái.
-    \item Đánh giá hiệu năng của hệ thống thông qua các thí nghiệm ngoại tuyến, bao gồm độ chính xác phát hiện sự kiện và nhận dạng thiết bị.
-\end{itemize}
-
-Một số nội dung liên quan nhưng không được xem xét trong phạm vi đề tài bao gồm:
-
-\begin{itemize}
-    \item Ước lượng năng lượng tiêu thụ dài hạn hoặc phân rã công suất liên tục theo thời gian.
-    \item Tối ưu hóa chuyên sâu các mô hình học máy hoặc triển khai các mô hình phức tạp yêu cầu dữ liệu lớn.
-    \item Tích hợp hệ thống vào phần cứng đo đạc thời gian thực hoặc các nền tảng IoT/embedded.
-\end{itemize}
 
 \section{Cấu trúc của đồ án}
 
@@ -325,21 +243,19 @@ Một số nội dung liên quan nhưng không được xem xét trong phạm vi
 
 Cấu trúc cụ thể của đồ án như sau:
 
-\begin{itemize}
-    \item \textbf{Chương 1: Giới thiệu} – Trình bày bối cảnh nghiên cứu về NILM, các hướng tiếp cận phổ biến, đặt vấn đề, mục tiêu và phạm vi nghiên cứu. Đồng thời, chương này nêu tổng quan về đóng góp chính của đề tài, bao gồm xây dựng hệ thống NILM hướng sự kiện và bộ dữ liệu thực nghiệm mới.
+\textbf{Chương 1: Giới thiệu} – Trình bày bối cảnh nghiên cứu về NILM, các hướng tiếp cận phổ biến, đặt vấn đề, mục tiêu và phạm vi nghiên cứu. Đồng thời, chương này nêu tổng quan về đóng góp chính của đề tài, bao gồm xây dựng hệ thống NILM hướng sự kiện và bộ dữ liệu thực nghiệm mới.
     
-    \item \textbf{Chương 2: Tổng quan hệ thống NILM đề xuất} – Mô tả kiến trúc và các thành phần chính của hệ thống, bao gồm khối thu thập dữ liệu, phát hiện sự kiện, tiền xử lý và trích xuất đặc trưng, nhận dạng thiết bị. Chương này cũng nêu ưu điểm nổi bật và các hạn chế cùng hướng khắc phục.
+\textbf{Chương 2: Tổng quan hệ thống NILM đề xuất} – Mô tả kiến trúc và các thành phần chính của hệ thống, bao gồm khối thu thập dữ liệu, phát hiện sự kiện, tiền xử lý và trích xuất đặc trưng, nhận dạng thiết bị. Chương này cũng nêu ưu điểm nổi bật và các hạn chế cùng hướng khắc phục.
     
-    \item \textbf{Chương 3: Thu thập dữ liệu} – Trình bày phương pháp thu thập dữ liệu thực nghiệm, bao gồm các sự kiện bật/tắt của nhiều thiết bị, phạm vi thực hiện và ghi chú về triển khai thực tế. Chương này cũng giới thiệu bộ dữ liệu mới được xây dựng, phục vụ trực tiếp cho kiểm thử hệ thống NILM hướng sự kiện.
+\textbf{Chương 3: Thu thập dữ liệu} – Trình bày phương pháp thu thập dữ liệu thực nghiệm, bao gồm các sự kiện bật/tắt của nhiều thiết bị, phạm vi thực hiện và ghi chú về triển khai thực tế. Chương này cũng giới thiệu bộ dữ liệu mới được xây dựng, phục vụ trực tiếp cho kiểm thử hệ thống NILM hướng sự kiện.
     
-    \item \textbf{Chương 4: Thuật toán phát hiện sự kiện} – Trình bày tổng quan thuật toán phát hiện sự kiện đề xuất được áp dụng, áp dụng nhiều phương pháp bao gồm lọc trung bình, WAMMA, bộ lọc Kalman, và thuật toán Hybrid của Mengqi Lu và Zuyi Li. Chương này cũng trình bày cách đánh giá hiệu quả các thuật toán.
+\textbf{Chương 4: Thuật toán phát hiện sự kiện} – Trình bày tổng quan thuật toán phát hiện sự kiện đề xuất được áp dụng, áp dụng nhiều phương pháp bao gồm lọc trung bình, WAMMA, bộ lọc Kalman, và thuật toán Hybrid của Mengqi Lu và Zuyi Li. Chương này cũng trình bày cách đánh giá hiệu quả các thuật toán.
     
-    \item \textbf{Chương 5: Tiền xử lý dữ liệu và trích xuất đặc trưng} – Trình bày mục tiêu của giai đoạn tiền xử lý, phương pháp trích xuất đặc trưng công suất và đặc trưng ảnh, cơ sở lý thuyết, vấn đề thực tế, phương pháp tính toán và kết quả thu được.
+\textbf{Chương 5: Tiền xử lý dữ liệu và trích xuất đặc trưng} – Trình bày mục tiêu của giai đoạn tiền xử lý, phương pháp trích xuất đặc trưng công suất và đặc trưng ảnh, cơ sở lý thuyết, vấn đề thực tế, phương pháp tính toán và kết quả thu được.
     
-    \item \textbf{Chương 6: Mô hình học máy} – Trình bày các mô hình học máy được áp dụng cho việc nhận dạng thiết bị dựa trên đặc trưng tín hiệu đã trích xuất, cũng như các bước huấn luyện, kiểm thử và tối ưu hóa mô hình.
+\textbf{Chương 6: Mô hình học máy} – Trình bày các mô hình học máy được áp dụng cho việc nhận dạng thiết bị dựa trên đặc trưng tín hiệu đã trích xuất, cũng như các bước huấn luyện, kiểm thử và tối ưu hóa mô hình.
     
-    \item \textbf{Chương 7: Kết quả và đánh giá hệ thống} – Trình bày dữ liệu đánh giá, quy trình đánh giá, kết quả thực nghiệm của các thuật toán phát hiện sự kiện, nhận xét và phân tích hiệu quả hệ thống.
-\end{itemize}
+\textbf{Chương 7: Kết quả và đánh giá hệ thống} – Trình bày dữ liệu đánh giá, quy trình đánh giá, kết quả thực nghiệm của các thuật toán phát hiện sự kiện, nhận xét và phân tích hiệu quả hệ thống.
 
 Cấu trúc này giúp làm rõ quá trình nghiên cứu từ lý thuyết đến triển khai thực nghiệm và đánh giá thuật toán, đồng thời nhấn mạnh đóng góp chính của đề tài trong việc phát triển hệ thống NILM hướng sự kiện và bộ dữ liệu thực nghiệm phục vụ quản lý năng lượng hiệu quả trong môi trường gia đình.
 
@@ -369,35 +285,19 @@ chuẩn hoá dữ liệu và đồng bộ thời gian giữa các kênh đo.
 
 \subsection{Khối phát hiện sự kiện bật/tắt thiết bị}
 
-Khối phát hiện sự kiện nhằm xác định thời điểm mà một thiết bị trong hệ thống thay 
-đổi trạng thái hoạt động. Đây là bước quan trọng nhất của toàn bộ pipeline, bởi chất lượng
-phát hiện sự kiện sẽ quyết định trực tiếp đến độ chính xác end-to-end của hệ thống.
+Khối phát hiện sự kiện có vai trò xác định chính xác thời điểm một thiết bị thay đổi trạng thái hoạt động, tức chuyển từ bật sang tắt hoặc ngược lại. Đây là một trong những thành phần quan trọng nhất của toàn bộ pipeline NILM, bởi chỉ cần giai đoạn này sai lệch, mọi bước xử lý phía sau — bao gồm trích xuất đặc trưng và nhận dạng thiết bị — đều bị ảnh hưởng và kéo theo sự suy giảm đáng kể của độ chính xác toàn hệ thống. Do đó, việc xây dựng một mô-đun phát hiện sự kiện ổn định, nhạy và đáng tin cậy là yêu cầu then chốt của hệ thống.
 
-Trong mô hình đề xuất, khối này được thiết kế theo hướng kết hợp nhiều kỹ thuật xử
-lý tín hiệu nhằm:
-\begin{itemize}
-    \item Giảm nhiễu do dao động tức thời của phụ tải
-    \item Tăng độ nhạy với các biến động công suất nhỏ
-    \item Cải thiện khả năng định biên sự kiện khi nhiều thiết bị hoạt động đồng thời.
-\end{itemize}
+Trong mô hình đề xuất của đề tài, khối phát hiện sự kiện được thiết kế theo hướng kết hợp nhiều kỹ thuật xử lý tín hiệu khác nhau. Các tín hiệu dòng điện và điện áp ban đầu được làm mượt để giảm thiểu nhiễu sinh ra từ dao động tức thời của các phụ tải. Tiếp theo, hệ thống tăng cường độ nhạy với các thay đổi công suất nhỏ nhằm đảm bảo rằng cả những thiết bị có công suất thấp hoặc chuyển trạng thái nhanh cũng được nhận diện đầy đủ. Bên cạnh đó, mô hình còn chú trọng cải thiện khả năng định biên sự kiện trong những tình huống có nhiều thiết bị hoạt động đồng thời — một bài toán khó thường gặp trong môi trường gia dụng thực tế, nơi các tín hiệu dễ chồng lấn và gây nhầm lẫn trong quá trình phân tích.
 
-Kết quả đầu ra của khối này là danh sách thời điểm xảy ra các sự kiện bật/tắt, làm
-cơ sở cho bước trích xuất đặc trưng.
+Kết quả đầu ra của khối này là danh sách các thời điểm xảy ra sự kiện bật hoặc tắt của thiết bị, kèm theo các thông tin đặc trưng liên quan đến biến động tín hiệu tại thời điểm đó. Những thời điểm này đóng vai trò làm điểm neo (anchor points) cho quá trình trích xuất đặc trưng ở bước tiếp theo, bảo đảm hệ thống chỉ phân tích những đoạn tín hiệu thực sự quan trọng thay vì toàn bộ chuỗi dữ liệu liên tục. Cách tiếp cận này không chỉ giúp giảm đáng kể chi phí tính toán mà còn cải thiện độ chính xác tổng thể của pipeline, đặc biệt trong điều kiện tín hiệu thực nghiệm phức tạp và nhiễu cao.
 
 \subsection{Khối tiền xử lý và trích xuất đặc trưng}
 
-Sau khi phát hiện sự kiện, hệ thống tiến hành cắt trích đoạn tín hiệu trong một cửa sổ 
-thời gian xung quanh sự kiện. Từ các đoạn tín hiệu này, các đặc trưng quan trọng được
-rút trích, bao gồm:
-\begin{itemize}
-    \item Độ thay đổi công suất $\Delta P$ trước và sau sự kiện,
-    \item Thông tin dạng sóng I--V,
-    \item Các biểu diễn tín hiệu được chuẩn hoá và chuyển đổi sang dạng ảnh phục vụ 
-          mô hình học máy.
-\end{itemize}
+Sau khi các sự kiện bật hoặc tắt được phát hiện, hệ thống tiến hành cắt và trích đoạn tín hiệu trong một cửa sổ thời gian bao quanh thời điểm sự kiện. Việc lựa chọn cửa sổ thời gian phù hợp giúp đảm bảo rằng cả tín hiệu trước và sau sự kiện đều được ghi nhận đầy đủ, từ đó cung cấp nguồn dữ liệu giàu thông tin cho quá trình phân tích. Từ các đoạn tín hiệu này, mô hình tiến hành rút trích nhiều dạng đặc trưng khác nhau nhằm biểu diễn hành vi của thiết bị khi xảy ra sự chuyển trạng thái.
 
-Khối này đóng vai trò kết nối giữa xử lý tín hiệu truyền thống và học máy, đảm bảo
-các tín hiệu thô được chuyển đổi sang không gian đặc trưng phù hợp để phân loại.
+Các đặc trưng được trích xuất bao gồm độ thay đổi công suất $\Delta P$ trước và sau sự kiện, vốn phản ánh mức tiêu thụ năng lượng tức thời của thiết bị khi chuyển trạng thái. Bên cạnh đó, dạng sóng I--V cũng được phân tích nhằm khai thác các dạng biến thiên tín hiệu mang tính đặc thù của từng loại thiết bị. Ngoài các đặc trưng trực tiếp từ miền thời gian, hệ thống còn chuyển đổi và chuẩn hoá các đoạn tín hiệu sang dạng ảnh, tạo ra một biểu diễn trực quan phù hợp với các mô hình học máy và đặc biệt hữu ích cho các thuật toán học sâu.
+
+Khối trích xuất đặc trưng đóng vai trò như cầu nối giữa xử lý tín hiệu truyền thống và các mô hình phân loại. Việc chuyển đổi dữ liệu thô sang một không gian đặc trưng giàu thông tin và ổn định giúp tăng đáng kể hiệu quả của bước nhận dạng thiết bị. Nhờ đó, hệ thống có thể khai thác đầy đủ các thông tin quan trọng trong tín hiệu, đồng thời giảm thiểu nhiễu và các yếu tố gây sai số xuất hiện trong quá trình đo đạc thực nghiệm.
 
 \subsection{Khối nhận diện thiết bị}
 
@@ -430,19 +330,15 @@ các sự kiện bất thường và thiết bị không thuộc tập huấn lu
 
 \section{Hạn chế và hướng hoàn thiện}
 
-Mặc dù có nhiều ưu điểm, hệ thống vẫn tồn tại một số hạn chế:
+Mặc dù hệ thống NILM theo hướng sự kiện mang lại nhiều ưu điểm trong việc phát hiện và nhận dạng thiết bị dựa trên tín hiệu thực nghiệm, vẫn còn tồn tại một số hạn chế cần được xem xét để hoàn thiện trong các nghiên cứu tiếp theo.
 
-\begin{itemize}
-    \item \textbf{Chi phí tính toán tương đối cao}: Các bước trích xuất và phân tích ảnh
-          tín hiệu đòi hỏi tài nguyên xử lý đáng kể.
-    \item \textbf{Yêu cầu phần cứng tương đối mạnh}: Việc triển khai trên thiết bị nhúng 
-          công suất thấp gặp nhiều hạn chế.
-    \item \textbf{Giới hạn trong các sự kiện quá gần nhau}: Khi hai sự kiện xảy ra trong
-          khoảng thời gian ngắn, việc định biên có thể chưa chính xác, dẫn đến gộp sự kiện.
-\end{itemize}
+Trước hết, chi phí tính toán của hệ thống vẫn còn tương đối cao. Các bước xử lý như chuẩn hoá tín hiệu, tạo ảnh đặc trưng và phân tích bằng mô hình học máy đòi hỏi lượng tài nguyên xử lý đáng kể, đặc biệt khi số lượng sự kiện lớn hoặc độ phân giải tín hiệu cao. Điều này khiến việc triển khai trên các thiết bị có cấu hình thấp gặp nhiều thách thức, đặc biệt trong môi trường yêu cầu thời gian thực.
 
-Những hạn chế này được thảo luận chi tiết hơn ở các chương tiếp theo cùng với định 
-hướng khắc phục trong tương lai.
+Bên cạnh đó, hệ thống hiện vẫn phụ thuộc vào phần cứng xử lý tương đối mạnh. Việc chuyển đổi tín hiệu sang dạng ảnh, kết hợp với các thuật toán học sâu, khiến cho các nền tảng nhúng hoặc IoT công suất thấp khó có thể vận hành trơn tru. Đây là một rào cản đối với việc triển khai rộng rãi trong các ứng dụng gia đình hoặc công nghiệp có quy mô lớn.
+
+Ngoài ra, hệ thống còn gặp hạn chế trong việc xử lý các sự kiện xảy ra quá gần nhau trong thời gian. Khi hai hoặc nhiều thiết bị thay đổi trạng thái gần như đồng thời, biên sự kiện có thể bị chồng lấn khiến quá trình phân tách trở nên thiếu chính xác. Hiện tượng này dẫn đến việc gộp sự kiện hoặc sai lệch trong trích xuất đặc trưng, từ đó ảnh hưởng tới hiệu suất nhận dạng của hệ thống.
+
+Những hạn chế nêu trên sẽ được phân tích chi tiết hơn ở các chương tiếp theo, đồng thời đề tài cũng đề xuất một số hướng hoàn thiện trong tương lai, bao gồm tối ưu hoá chi phí tính toán, cải thiện khả năng hoạt động trên thiết bị nhúng và tăng cường độ chính xác khi xử lý các chuỗi sự kiện phức tạp. Những định hướng này nhằm nâng cao tính ứng dụng thực tế và mở rộng khả năng triển khai hệ thống NILM trong các bối cảnh khác nhau.
 
 \chapter{Thu thập dữ liệu}
 
@@ -450,94 +346,36 @@ Trong phạm vi đồ án, dữ liệu điện áp (U) và dòng điện (I) t�
 
 \section{Phương pháp thu thập}
 
-Dữ liệu U và I được ghi nhận liên tục trong khi hệ thống đang hoạt động ở các trạng thái khác nhau của tập thiết bị gia đình. Trong mỗi lần thu thập, chúng tôi lựa chọn một tổ hợp thiết bị đang hoạt động ổn định (ví dụ bật đèn + quạt + laptop đang sạc). Sau đó, chúng tôi chủ động thay đổi trạng thái của một thiết bị duy nhất tại một thời điểm, chẳng hạn bật tủ lạnh, tắt sạc máy tính, hoặc bật máy sấy.
+Quá trình thu thập dữ liệu được thực hiện bằng cách ghi nhận liên tục tín hiệu điện áp \(U\) và dòng điện \(I\) trong khi hệ thống hoạt động với nhiều trạng thái thiết bị khác nhau. Trong mỗi phiên thu thập, một tập hợp thiết bị được lựa chọn và vận hành ở trạng thái ổn định, ví dụ như đèn được bật, quạt đang chạy hoặc máy tính xách tay trong quá trình sạc. Trên nền trạng thái ổn định đó, chúng tôi chủ động thay đổi trạng thái của một thiết bị duy nhất tại một thời điểm, chẳng hạn bật tủ lạnh, tắt bộ sạc máy tính hoặc kích hoạt máy sấy. Điều này giúp đảm bảo rằng mỗi sự kiện thu được tương ứng với đúng một thiết bị, tạo điều kiện thuận lợi cho quá trình gán nhãn và phân tích sau này.
 
-Mỗi sự kiện thay đổi trạng thái thiết bị đều được thu thập theo quy trình:
-\begin{itemize}
-    \item Ghi lại tín hiệu U và I trước thời điểm thiết bị thay đổi trạng thái (vùng “pre-event”).
-    \item  Ghi lại tín hiệu U và I sau thời điểm thiết bị thay đổi trạng thái (vùng “post-event”).
-    \item Hai vùng dữ liệu này được lưu dưới dạng các mẫu liên tục, dùng làm cơ sở để đánh giá khả năng phát hiện và nhận diện sự kiện.
-\end{itemize}
+Đối với mỗi sự kiện bật hoặc tắt, tín hiệu được ghi theo một quy trình thống nhất. Trước thời điểm thiết bị thay đổi trạng thái, hệ thống thu nhận một đoạn tín hiệu nền nhằm phản ánh dòng và áp khi bộ thiết bị đang vận hành ổn định. Ngay sau khi sự thay đổi trạng thái xảy ra, hệ thống tiếp tục ghi lại một đoạn tín hiệu thứ hai mô tả phản ứng chuyển tiếp của thiết bị. Hai vùng dữ liệu này được lưu trữ liên tục với tốc độ lấy mẫu cố định, tạo thành cặp mẫu trước–sau sự kiện. Các cặp tín hiệu này đóng vai trò là nguồn dữ liệu quan trọng để đánh giá khả năng phát hiện sự kiện và nhận dạng thiết bị, đồng thời đảm bảo tính phân tách rõ ràng giữa các thiết bị trong bộ dữ liệu thực nghiệm.
+
 
 \section{Cấu hình hệ thống đo và lý do lựa chọn phần cứng}
 
-Để đảm bảo thu được tín hiệu tức thời có độ chính xác cao, hệ thống đo được thiết kế dựa trên các thành phần sau.
+Để đảm bảo thu nhận được tín hiệu tức thời với độ chính xác cao, hệ thống đo được thiết kế dựa trên một tập hợp phần cứng phù hợp với điều kiện điện lưới Việt Nam cũng như yêu cầu của bài toán NILM theo hướng sự kiện. Các thành phần được lựa chọn không chỉ đảm bảo khả năng đo đúng biên dạng tín hiệu, mà còn phải chịu được nhiễu, đáp ứng đủ nhanh và vận hành an toàn trong môi trường gia dụng.
 
 \textbf{Điều kiện điện lưới Việt Nam}
 
-\begin{itemize}
-    \item Điện áp danh định: 220 V AC
-    \item Tần số lưới: 50 Hz
-\end{itemize}
-
-Các thông số này ảnh hưởng trực tiếp đến biên dạng tín hiệu cần đo, tốc độ lấy mẫu và yêu cầu thiết bị cảm biến.
+Điện áp danh định của lưới điện Việt Nam là 220~V AC với tần số 50~Hz. Hai thông số cơ bản này có ảnh hưởng trực tiếp đến cấu trúc tín hiệu cần thu thập, tốc độ lấy mẫu tối thiểu, dải hoạt động của cảm biến và khả năng phát hiện các thành phần hài hoặc nhiễu cao tần. Việc nắm rõ đặc điểm lưới điện thực tế là cơ sở quan trọng để lựa chọn phần cứng đo lường phù hợp và thiết kế bộ lọc, thuật toán trích xuất đặc trưng.
 
 \textbf{Cảm biến dòng SCT013}
 
-Cảm biến SCT013 là loại biến dòng không xâm lấn, có ưu điểm:
-
-\begin{itemize}
-    \item An toàn tuyệt đối nhờ cách ly hoàn toàn với lưới điện.
-    \item Dễ lắp đặt ở mọi dây tải.
-    \item Đáp ứng đủ chính xác cho các thiết bị gia dụng trong dải 0–20 A.
-    \item Tín hiệu tuyến tính tốt trong khoảng dòng thường gặp của hộ gia đình.
-\end{itemize}
-
-SCT013 đặc biệt phù hợp cho nghiên cứu NILM vì nhiều thiết bị có dòng khởi động lớn, và cảm biến này có thể ghi nhận được đặc trưng chuyển tiếp đó.
+Cảm biến SCT013 được sử dụng như một giải pháp đo dòng không xâm lấn, giúp đảm bảo an toàn tuyệt đối vì hoàn toàn cách ly với lưới điện. Thiết bị này có thể kẹp vào bất kỳ dây tải nào mà không cần can thiệp vào kết nối điện, từ đó hỗ trợ quá trình lắp đặt nhanh chóng và phù hợp với nhiều thiết bị gia dụng. Trong khoảng dòng từ 0--20~A, SCT013 cho độ tuyến tính đủ tốt đối với các ứng dụng NILM, đồng thời có khả năng ghi nhận chính xác các dòng khởi động lớn, vốn là đặc trưng quan trọng khi phân tách và nhận dạng thiết bị.
 
 \textbf{Cảm biến điện áp ZMPT107}
 
-Việc đo điện áp dạng sóng giúp nhận diện:
-
-\begin{itemize}
-    \item Biến dạng sóng khi thiết bị phi tuyến bật/tắt
-    \item Sự lệch pha giữa U và I
-    \item Các nhiễu chuyển tiếp trong khoảng dưới 20 ms.
-\end{itemize}
-
-ZMPT107 có ưu điểm:
-
-\begin{itemize}
-    \item Độ chính xác cao với điện áp xoay chiều 0–250 V.
-    \item Có biến áp cách ly chống giật, đảm bảo an toàn.
-    \item Đáp ứng đủ nhanh cho bài toán NILM.
-\end{itemize}
+Việc đo dạng sóng điện áp đóng vai trò quan trọng trong bài toán NILM, bởi nó cung cấp thêm thông tin về biến dạng sóng, sự lệch pha giữa điện áp và dòng điện cũng như các nhiễu chuyển tiếp xảy ra trong thời gian rất ngắn (dưới 20~ms). Cảm biến ZMPT107 đáp ứng tốt các yêu cầu này nhờ độ chính xác cao trong dải điện áp AC 0--250~V và thiết kế tích hợp biến áp cách ly giúp đảm bảo an toàn khi kết nối với lưới điện. Tốc độ đáp ứng của cảm biến đủ nhanh để tái tạo chính xác dạng sóng, phục vụ quá trình phân tích sự kiện bật/tắt của thiết bị.
 
 \textbf{IC đo điện năng BL0940}
 
-IC BL0940 thực hiện số hóa tín hiệu U và I. Lý do lựa chọn BL0940 thay vì các IC như ADE7755 hay HLW8012:
+BL0940 là bộ xử lý năng lượng chuyên dụng được lựa chọn làm lõi thu thập dữ liệu. So với các IC như ADE7755 hay HLW8012, BL0940 có độ phân giải ADC cao hơn và khả năng xuất dữ liệu tức thời thay vì chỉ cung cấp các giá trị RMS, điều này đặc biệt quan trọng đối với bài toán phát hiện sự kiện. Ngoài ra, BL0940 tích hợp các bộ lọc chống nhiễu tần số cao, giúp tín hiệu thu thập ổn định hơn trong điều kiện môi trường nhiều nhiễu như lưới điện dân dụng. Giao tiếp SPI tốc độ cao của IC hỗ trợ truyền dữ liệu liên tục mà không mất mẫu. BL0940 có thể cung cấp đồng thời điện áp tức thời, dòng điện tức thời, công suất tức thời và các giá trị RMS theo cửa sổ trượt, nhờ đó phù hợp cho cả các bài toán NILM theo sự kiện và NILM theo dạng sóng.
 
-\begin{itemize}
-    \item Độ phân giải ADC cao hơn.
-    \item Có khả năng xuất dữ liệu tức thời, không chỉ giá trị RMS.
-    \item Tích hợp bộ lọc chống nhiễu tần số cao.
-    \item Giao tiếp bằng SPI, tốc độ truyền nhanh và ổn định.
-\end{itemize}
+\textbf{Raspberry Pi 4 làm thiết bị thu nhận dữ liệu}
 
+Raspberry Pi~4 được sử dụng làm bộ xử lý trung tâm trong quá trình thu thập tín hiệu. Thiết bị này đảm nhận nhiệm vụ nhận dữ liệu tốc độ cao từ BL0940 thông qua giao tiếp SPI, ghi tín hiệu theo thời gian thực vào các tệp CSV và gán timestamp có độ chính xác đến microsecond. Với khả năng chạy Python linh hoạt, Pi~4 cho phép tích hợp trực tiếp các đoạn mã xử lý dữ liệu thô hoặc thực hiện tiền xử lý ngay tại thời điểm thu nhận. Nhờ năng lực tính toán ổn định và bộ nhớ đủ lớn, hệ thống đảm bảo không xảy ra hiện tượng mất mẫu, đồng thời tạo nền tảng vững chắc cho các bước phân tích tiếp theo.
 
-BL0940 cung cấp cả:
-
-\begin{itemize}
-    \item Tín hiệu điện áp tức thời
-    \item Tín hiệu dòng tức thời
-    \item Công suất tức thời
-    \item Giá trị RMS theo cửa sổ trượt
-\end{itemize}
-
-IC này rất phù hợp cho NILM ở cả mức sự kiện và mức phân giải thiết bị.
-
-\textbf{Raspberry Pi 4 là thiết bị thu nhận dữ liệu}
-
-Raspberry Pi 4 đảm nhiệm các nhiệm vụ:
-
-\begin{itemize}
-    \item Nhận dữ liệu tốc độ cao qua SPI từ BL0940
-    \item Ghi dữ liệu theo thời gian thực vào tệp CSV
-    \item Gán timestamp với độ chính xác microsecond
-    \item Giao tiếp dễ dàng với Python để xử lý tiền dữ liệu
-\end{itemize}
-
-Việc sử dụng Pi4 giúp đảm bảo không mất mẫu, đồng thời tạo môi trường xử lý linh hoạt.
+Tổng thể, cấu hình phần cứng được lựa chọn dựa trên sự cân bằng giữa độ chính xác đo lường, tính an toàn, chi phí hợp lý và khả năng đáp ứng yêu cầu của bài toán NILM trên tín hiệu thực nghiệm. Bộ thiết bị này cho phép tái tạo dạng sóng với độ trung thực cao, từ đó hỗ trợ hiệu quả các thuật toán phát hiện sự kiện và nhận dạng thiết bị.
 
 
 \begin{figure}[H]{Sơ đồ hệ thống thu thập dữ liệu được sử dụng}
@@ -557,25 +395,13 @@ Do vậy, kết quả của đồ án có ý nghĩa như một bước thử ngh
 
 \section{Ghi chú về triển khai thực tế}
 
-Trong ứng dụng thực tế của hệ thống NILM, quá trình thu thập và xử lý dữ liệu phải được thực hiện theo thời gian thực (real-time), khác biệt đáng kể so với cách xử lý ngoại tuyến trong phạm vi đồ án. Cụ thể, để xác định đúng vùng ``trước sự kiện'' (pre-event) và ``sau sự kiện'' (post-event), hệ thống phải liên tục giám sát và lưu trữ tín hiệu U và I trong bộ đệm trượt (sliding buffer). Bộ đệm này luôn chứa một lượng dữ liệu gần nhất, cho phép truy xuất tức thời khi phát hiện sự thay đổi bất thường trong tín hiệu.
+Trong bối cảnh ứng dụng thực tế của hệ thống NILM, việc thu thập và xử lý tín hiệu phải được thực hiện theo thời gian thực (real-time), khác biệt đáng kể so với phương pháp xử lý ngoại tuyến được sử dụng trong phạm vi đồ án. Để xác định chính xác vùng tín hiệu ``trước sự kiện'' và ``sau sự kiện'', hệ thống cần liên tục giám sát dòng điện \(I\) và điện áp \(U\) thông qua một bộ đệm trượt (sliding buffer). Bộ đệm này luôn duy trì một lượng dữ liệu gần nhất, cho phép hệ thống truy xuất ngay lập tức khi xuất hiện dấu hiệu bất thường trong tín hiệu, chẳng hạn biến động công suất vượt ngưỡng hoặc nhiễu chuyển tiếp đặc trưng.
 
-Trong trường hợp xảy ra sự kiện bật hoặc tắt thiết bị, hệ thống cần:
-\begin{itemize}
-    \item trích xuất một cửa sổ dữ liệu ngay trước thời điểm thay đổi (pre-event window),
-    \item trích xuất cửa sổ dữ liệu ngay sau sự kiện (post-event window),
-    \item gửi hai vùng tín hiệu này đến bộ phận phân tích đặc trưng và nhận diện.
-\end{itemize}
+Khi một sự kiện bật hoặc tắt thiết bị xảy ra, hệ thống phải lập tức trích xuất một cửa sổ tín hiệu bao gồm vùng trước thời điểm thay đổi và vùng ngay sau sự kiện . Hai vùng tín hiệu này sau đó được chuyển tiếp đến các mô-đun xử lý chuyên biệt, nơi thực hiện phân tích đặc trưng và nhận dạng thiết bị gây ra sự kiện. Để toàn bộ quy trình diễn ra trơn tru, phần cứng phải đảm bảo khả năng lấy mẫu liên tục với tốc độ cao, xử lý tín hiệu đủ nhanh và sở hữu dung lượng bộ nhớ đáp ứng yêu cầu lưu trữ bộ đệm thời gian thực. Ngoài ra, hệ thống thực tế cũng cần cơ chế đồng bộ thời gian chính xác nhằm quản lý các sự kiện xảy ra gần nhau, tránh mất thông tin hoặc gộp nhầm các sự kiện liên tiếp.
 
-Quá trình này đòi hỏi phần cứng phải hoạt động ổn định, có khả năng lấy mẫu liên tục, xử lý tín hiệu nhanh và có dung lượng bộ nhớ đủ để lưu bộ đệm. Bên cạnh đó, hệ thống thực tế cần có cơ chế đồng bộ thời gian chính xác, quản lý nhiều sự kiện có thể diễn ra gần như đồng thời, và đảm bảo độ tin cậy ngay cả khi tải biến động mạnh hoặc xuất hiện nhiễu điện lưới.
+Bên cạnh các yêu cầu kỹ thuật, triển khai NILM ngoài thực tế còn gặp nhiều thách thức bổ sung. Sự đa dạng của thiết bị gia dụng trong từng hộ gia đình tạo ra sự khác biệt đáng kể trong đặc trưng dạng sóng, khiến mô hình phải có khả năng thích ứng linh hoạt. Môi trường điện lực thực tế thường chứa nhiều dạng nhiễu, dao động điện áp và thành phần phi tuyến, gây khó khăn cho quá trình định biên sự kiện. Thêm vào đó, các ràng buộc về chi phí phần cứng và nhu cầu mở rộng hệ thống theo thời gian khiến việc lựa chọn kiến trúc phù hợp trở thành một bài toán quan trọng.
 
-Ngoài yêu cầu kỹ thuật, triển khai thực tế còn phải đối mặt với các thách thức khác như:
-\begin{itemize}
-    \item Tính đa dạng của thiết bị gia dụng trong các hộ gia đình.
-    \item Anh hưởng từ môi trường điện lực (nhiễu, dao động điện áp, công suất phản kháng).
-    \item Giới hạn về chi phí phần cứng và khả năng mở rộng hệ thống.
-\end{itemize}
-
-Những yếu tố này cho thấy việc triển khai một hệ thống NILM hoàn chỉnh ngoài thực tế phức tạp hơn đáng kể so với mô phỏng trong khuôn khổ đồ án. Tuy nhiên, mô hình đã xây dựng trong đề tài có thể xem như nền tảng ban đầu để phát triển các phiên bản hoạt động theo thời gian thực trong tương lai.
+Những yếu tố nêu trên cho thấy việc triển khai một hệ thống NILM hoàn chỉnh ngoài thực tế phức tạp hơn rất nhiều so với mô phỏng trong khuôn khổ đồ án. Tuy vậy, mô hình được xây dựng trong nghiên cứu này vẫn đóng vai trò như một nền tảng ban đầu quan trọng, cung cấp cơ sở để phát triển các phiên bản hoạt động theo thời gian thực trong giai đoạn tiếp theo.
 
 
 \section{Hạn chế của hệ thống thu thập}
@@ -745,52 +571,14 @@ Quá trình này làm giảm dao động cục bộ, làm mượt tín hiệu nh
 
 \textbf{Ứng dụng trong hệ thống NILM của đề tài}
 
-Trong hệ thống thu thập dữ liệu của đề tài, bộ lọc trung bình được sử dụng với hai mục đích chính:
+Trong hệ thống thu thập dữ liệu của đề tài, bộ lọc trung bình được sử dụng với hai mục đích chính. Thứ nhất, bộ lọc giúp làm mượt tín hiệu dòng điện và điện áp. Các cảm biến như SCT013 và ZMPT107 vốn có nhiễu nội tại, đặc biệt khi đo ở dòng nhỏ hoặc trong điều kiện điện áp dao động; bên cạnh đó, IC BL0940 cũng tạo ra nhiễu dạng xung nhỏ trong quá trình chuyển đổi ADC. Việc áp dụng bộ lọc Moving Average cho phép giảm nhiễu đo, ổn định tín hiệu, làm rõ hơn các sự kiện bật/tắt và hạn chế sai số trong tính toán công suất tức thời. Điều này đặc biệt quan trọng vì thuật toán phát hiện sự kiện của hệ thống phụ thuộc vào sự biến thiên đột ngột của công suất~$P$ và dòng~$I$.
 
-\textit{Làm mượt tín hiệu dòng điện và điện áp}
-
-Các cảm biến như SCT013 và ZMPT107 vốn có nhiễu nội tại, đặc biệt khi đo ở dòng nhỏ hoặc điện áp dao động. IC BL0940 cũng tạo ra nhiễu dạng xung nhỏ trong quá trình chuyển đổi ADC. Việc áp dụng Moving Average giúp:
-\begin{itemize}
-    \item giảm nhiễu đo,
-    \item ổn định tín hiệu,
-    \item làm rõ ràng các sự kiện bật/tắt,
-    \item giảm sai số trong tính toán công suất tức thời.
-\end{itemize}
-
-Điều này đặc biệt quan trọng vì thuật toán phát hiện sự kiện dựa vào biến thiên đột ngột của công suất P và dòng I.
-
-\textit{Giảm tần số lấy mẫu từ 1000\,Hz xuống 100\,Hz}
-
-Việc thu thập tín hiệu ban đầu ở tần số 1000\,Hz giúp đảm bảo không mất thông tin gốc. Tuy nhiên, lưu và xử lý dữ liệu ở 1000 điểm/mỗi giây sẽ gây ra:
-
-\begin{itemize}
-    \item dung lượng dữ liệu lớn,
-    \item tốc độ xử lý chậm,
-    \item khó quan sát sự kiện,
-    \item tăng thời gian huấn luyện mô hình và phân tích.
-\end{itemize}
-
-Do đó, tín hiệu sau khi làm mượt được giảm mẫu còn 100\,Hz bằng cách tính trung bình mỗi 10 mẫu liên tiếp. Tần số 100\,Hz vẫn đủ cao để mô tả đầy đủ đường bao (envelope) của tải điện 50\,Hz.  
-
-Lợi ích của việc giảm tần số mẫu:
-\begin{itemize}
-    \item giảm dung lượng dữ liệu xuống 1/10,
-    \item tăng tốc độ xử lý mà không làm mất thông tin về sự kiện,
-    \item phù hợp với yêu cầu của các thuật toán event detection truyền thống,
-    \item giảm nhiễu tần số cao vốn không cần thiết cho bài toán.
-\end{itemize}
+Thứ hai, bộ lọc được sử dụng nhằm giảm tần số lấy mẫu từ~1000\,Hz xuống~100\,Hz. Việc thu thập tín hiệu ban đầu ở 1000\,Hz giúp đảm bảo không mất thông tin gốc; tuy nhiên, xử lý và lưu trữ dữ liệu ở mức 1000 mẫu mỗi giây tạo ra dung lượng lớn, làm chậm quá trình tính toán, gây khó khăn trong việc quan sát sự kiện và kéo dài thời gian huấn luyện mô hình. Sau khi được làm mượt, tín hiệu được giảm mẫu bằng cách lấy trung bình mỗi 10 mẫu liên tiếp, đưa tần số xuống còn 100\,Hz. Mức tần số này vẫn đủ cao để mô tả chính xác đường bao (envelope) của tải điện xoay chiều 50\,Hz, đồng thời làm giảm dung lượng dữ liệu xuống còn một phần mười, tăng tốc độ xử lý mà không làm mất thông tin quan trọng về sự kiện. Việc giảm tần số mẫu như vậy cũng phù hợp với yêu cầu của các thuật toán phát hiện sự kiện truyền thống và giúp loại bỏ các thành phần nhiễu tần số cao vốn không cần thiết đối với bài toán.
 
 \textbf{Hạn chế của bộ lọc trung bình}
 
-Mặc dù hiệu quả và đơn giản, Moving Average có các hạn chế:
-\begin{itemize}
-    \item làm mờ biên các sự kiện rất nhanh (ví dụ spike nhỏ trong tải SMPS),
-    \item không phù hợp cho phân tích tần số cao,
-    \item có độ trễ cố hữu,
-    \item không tối ưu khi nhiễu không phải dạng Gaussian.
-\end{itemize}
+Mặc dù đơn giản và hiệu quả trong bối cảnh đề tài, Moving Average vẫn tồn tại một số hạn chế. Bộ lọc có xu hướng làm mờ biên của các sự kiện xảy ra rất nhanh, chẳng hạn các spike nhỏ trong tải sử dụng bộ nguồn chuyển mạch . Ngoài ra, bộ lọc không phù hợp cho các phân tích liên quan đến thành phần tần số cao, có độ trễ cố hữu và không tối ưu khi nhiễu không tuân theo phân bố Gaussian. Tuy nhiên, do phạm vi của đồ án chủ yếu tập trung vào việc nhận diện các sự kiện bật/tắt với mức thay đổi công suất tương đối lớn, những hạn chế này không gây ảnh hưởng đáng kể đến chất lượng của mô hình. 
 
-Tuy nhiên, trong bối cảnh của đồ án — tập trung vào sự kiện bật/tắt công suất tương đối lớn — những hạn chế này không ảnh hưởng đến chất lượng mô hình.
 
 \textbf{Minh họa trên dữ liệu PLAID}
 
@@ -816,23 +604,21 @@ Thuật toán WAMMA (Window with Adaptive Margins and Multi-window Analysis) đ�
 
 Thuật toán WAMMA dựa trên ba cơ chế chính:
 
-\begin{itemize}
-    \item \textbf{(1) Adaptive Window Margins:} 
-    Cửa sổ trượt được chia thành ba vùng: vùng biên trái (Left Margin), vùng trung tâm và vùng biên phải (Right Margin). Hai biên này đại diện cho các trạng thái công suất trước và sau sự kiện. Trong quá trình phân tích, kích thước biên được điều chỉnh tự động dựa trên biến thiên công suất và xu hướng tín hiệu để đảm bảo vùng chuyển tiếp của sự kiện được bao trọn hoàn toàn. 
-    Cơ chế này giúp thuật toán thích nghi với độ dài khác nhau của các sự kiện chuyển tiếp (ví dụ: bật/tắt thiết bị công suất lớn thường có quá trình chuyển tiếp dài hơn so với thiết bị nhỏ).
+\textbf{Adaptive Window Margins:} 
+Cửa sổ trượt được chia thành ba vùng: vùng biên trái (Left Margin), vùng trung tâm và vùng biên phải (Right Margin). Hai biên này đại diện cho các trạng thái công suất trước và sau sự kiện. Trong quá trình phân tích, kích thước biên được điều chỉnh tự động dựa trên biến thiên công suất và xu hướng tín hiệu để đảm bảo vùng chuyển tiếp của sự kiện được bao trọn hoàn toàn. 
+Cơ chế này giúp thuật toán thích nghi với độ dài khác nhau của các sự kiện chuyển tiếp (ví dụ: bật/tắt thiết bị công suất lớn thường có quá trình chuyển tiếp dài hơn so với thiết bị nhỏ).
 
-    \item \textbf{(2) Adaptive Thresholding:}
-    Ngưỡng phát hiện sự kiện không cố định mà được cập nhật động theo độ lệch chuẩn của dữ liệu trong cửa sổ hiện tại. 
-    Cụ thể, ngưỡng thích ứng được tính theo công thức:
-    \[
-    P_{thr,w} = \max(P_{thr}, r_{thr} \times \sigma)
-    \]
-    trong đó $\sigma$ là độ lệch chuẩn của tín hiệu công suất trong cửa sổ, $P_{thr}$ là ngưỡng tối thiểu định trước, và $r_{thr}$ là hệ số tỉ lệ. 
-    Cơ chế này giúp thuật toán tự động điều chỉnh độ nhạy, giảm phát hiện giả khi tín hiệu nhiễu cao và tăng độ chính xác khi tín hiệu ổn định.
+\textbf{Adaptive Thresholding:}
+Ngưỡng phát hiện sự kiện không cố định mà được cập nhật động theo độ lệch chuẩn của dữ liệu trong cửa sổ hiện tại. 
+Cụ thể, ngưỡng thích ứng được tính theo công thức:
+\[
+P_{thr,w} = \max(P_{thr}, r_{thr} \times \sigma)
+\]
+trong đó $\sigma$ là độ lệch chuẩn của tín hiệu công suất trong cửa sổ, $P_{thr}$ là ngưỡng tối thiểu định trước, và $r_{thr}$ là hệ số tỉ lệ. 
+Cơ chế này giúp thuật toán tự động điều chỉnh độ nhạy, giảm phát hiện giả khi tín hiệu nhiễu cao và tăng độ chính xác khi tín hiệu ổn định.
 
-    \item \textbf{(3) Multi-window Screening:}
-    Để đảm bảo phát hiện ổn định, WAMMA có thể triển khai đồng thời nhiều cửa sổ có kích thước khác nhau. Nếu một sự kiện được phát hiện trong nhiều cửa sổ trượt liên tiếp hoặc ở các độ rộng cửa sổ khác nhau, kết quả đó được xác nhận là sự kiện thật. Cơ chế sàng lọc đa cửa sổ này giúp loại bỏ nhiễu ngắn hạn và cải thiện độ tin cậy của hệ thống.
-\end{itemize}
+\textbf{Multi-window Screening:}
+Để đảm bảo phát hiện ổn định, WAMMA có thể triển khai đồng thời nhiều cửa sổ có kích thước khác nhau. Nếu một sự kiện được phát hiện trong nhiều cửa sổ trượt liên tiếp hoặc ở các độ rộng cửa sổ khác nhau, kết quả đó được xác nhận là sự kiện thật. Cơ chế sàng lọc đa cửa sổ này giúp loại bỏ nhiễu ngắn hạn và cải thiện độ tin cậy của hệ thống.
 
 Ngoài ra, WAMMA còn tích hợp cơ chế \textit{cross-validation} giữa các bộ dữ liệu để đánh giá tính ổn định của tham số, chứng minh khả năng tổng quát hóa cao trong môi trường thực tế.
 
@@ -872,14 +658,9 @@ Thuật toán được mô tả ngắn gọn bằng mã giả dưới đây, d�
 
 \subsection{Phân tích và đánh giá}
 
-WAMMA mang lại một số ưu điểm nổi bật so với các phương pháp truyền thống như CUSUM hay GLR:
-\begin{itemize}
-    \item Thích ứng tốt với nhiễu và dao động do điều khiển điện tử.
-    \item Không cần tinh chỉnh tham số thủ công khi áp dụng cho các hộ gia đình khác nhau.
-    \item Có thể mở rộng sang các tập dữ liệu có tần số lấy mẫu khác nhau (20 Hz, 50 Hz, 60 Hz).
-\end{itemize}
+Phương pháp WAMMA mang lại nhiều ưu điểm nổi bật so với các phương pháp truyền thống như CUSUM hay GLR. Trước hết, WAMMA thể hiện khả năng thích ứng tốt trong môi trường dữ liệu nhiễu và có nhiều dao động do các thiết bị điều khiển điện tử gây ra. Bên cạnh đó, phương pháp này không yêu cầu tinh chỉnh tham số thủ công khi áp dụng cho các hộ gia đình khác nhau, qua đó giúp giảm đáng kể công sức hiệu chỉnh và nâng cao tính thực tiễn của hệ thống. Một ưu điểm quan trọng khác là WAMMA có thể được mở rộng để hoạt động hiệu quả trên các tập dữ liệu có tần số lấy mẫu khác nhau, chẳng hạn 20\,Hz, 50\,Hz hoặc 60\,Hz, mà không làm suy giảm độ chính xác.
 
-Các thử nghiệm trên bộ dữ liệu LIFTED (50 Hz) và BLUED (60 Hz) trong nghiên cứu gốc cho thấy, phương pháp WAMMA đạt độ chính xác cao hơn và độ nhạy tốt hơn so với các kỹ thuật phát hiện sự kiện hiện có, đồng thời duy trì khả năng ổn định khi thay đổi tập dữ liệu.
+Kết quả thử nghiệm trên các bộ dữ liệu LIFTED (50\,Hz) và BLUED (60\,Hz) trong nghiên cứu gốc cho thấy WAMMA đạt độ chính xác và độ nhạy cao hơn so với các kỹ thuật phát hiện sự kiện hiện có, đồng thời duy trì được tính ổn định ngay cả khi thay đổi đặc tính của tập dữ liệu. Những đánh giá này cho thấy WAMMA là một hướng tiếp cận hiệu quả cho các hệ thống NILM hiện đại. 
 
 \section{Bộ lọc Kalman}
 Bộ lọc Kalman là một phương pháp ước lượng trạng thái tối ưu, được sử dụng để làm mượt tín hiệu trong các hệ thống có nhiễu. Nguyên tắc cơ bản là kết hợp giá trị dự đoán từ dữ liệu trước đó với giá trị quan sát thực tế, nhằm tạo ra một tín hiệu mượt và chính xác hơn.
@@ -1004,35 +785,19 @@ Tổng thể, kết quả cho thấy thuật toán đề xuất phù hợp với
 \chapter{Tiền xử lý dữ liệu và trích xuất đặc trưng}
 
 \section{Mục tiêu của giai đoạn tiền xử lý và trích xuất đặc trưng}
-Mục tiêu chính của giai đoạn tiền xử lý và trích xuất đặc trưng là xác định và biểu diễn đặc trưng riêng của thiết bị vừa thay đổi trạng thái hoạt động. Cụ thể, quá trình này bao gồm:
-\begin{itemize}
-    \item Trích xuất đặc trưng công suất tiêu thụ của thiết bị tại thời điểm xảy ra thay đổi trạng thái (bật/tắt hoặc chuyển chế độ hoạt động).
-    \item Trích xuất đặc trưng hình ảnh (I–V) của thiết bị, trong đó hình ảnh được biểu diễn dưới dạng đồ thị với: \begin{itemize}
-        \item Trục hoành: hiệu điện thế U
-        \item Trục tung: dòng điện I       
-    \end{itemize}
-\end{itemize}
-Trong hệ thống điện dân dụng, hiệu điện thế U thường có dạng gần như cố định, trong khi dòng điện I thay đổi theo đặc tính tải của từng thiết bị. Do đó, mỗi thiết bị sẽ tạo ra đặc trưng I–V khác nhau, phản ánh hành vi tiêu thụ điện riêng biệt.
+Mục tiêu chính của giai đoạn tiền xử lý và trích xuất đặc trưng là xác định và biểu diễn các dấu hiệu đặc trưng của thiết bị vừa thay đổi trạng thái hoạt động. Quá trình này bao gồm hai nhóm đặc trưng quan trọng. Thứ nhất, hệ thống tiến hành trích xuất đặc trưng công suất tiêu thụ tại thời điểm thiết bị xảy ra thay đổi trạng thái, chẳng hạn bật, tắt hoặc chuyển chế độ hoạt động. Thứ hai, hệ thống trích xuất đặc trưng hình ảnh I–V, trong đó mối quan hệ giữa hiệu điện thế~$U$ và dòng điện~$I$ được biểu diễn dưới dạng đồ thị, với trục hoành là điện áp và trục tung là dòng điện.
 
-Các đặc trưng về công suất và hình ảnh I–V này sẽ được sử dụng làm cơ sở cho quá trình nhận dạng thiết bị, giúp phân biệt các thiết bị điện trong cùng hệ thống.
+Trong hệ thống điện dân dụng, hiệu điện thế~$U$ thường có dạng gần như cố định, trong khi dòng điện~$I$ thay đổi tùy theo đặc tính tải của từng thiết bị. Nhờ đó, mỗi thiết bị tạo ra một đặc trưng I–V riêng biệt, phản ánh hành vi tiêu thụ điện đặc trưng của nó. Các đặc trưng về công suất và đồ thị I–V này được sử dụng làm cơ sở cho quá trình nhận dạng thiết bị, giúp phân biệt các thiết bị điện trong cùng một hệ thống.
 
 \section{Trích xuất đặc trưng công suất}
-Khi thuật toán phát hiện sự kiện xác định có sự thay đổi trạng thái xảy ra, nó sẽ trả về thời điểm phát hiện sự kiện cùng với độ dài cửa sổ sự kiện. Dựa trên các thông tin này, ta xác định hai mốc thời gian quan trọng:
-\begin{itemize}
-    \item Thời điểm trước sự kiện: được lấy sớm hơn thời điểm phát hiện một vài giây.
-    \item Thời điểm sau sự kiện: được lấy muộn hơn thời điểm kết thúc cửa sổ sự kiện một vài giây.
-\end{itemize}
-Việc dịch thời gian như vậy nhằm loại bỏ giai đoạn quá độ (transition period) – giai đoạn mà thiết bị vừa thay đổi trạng thái và công suất chưa ổn định. Điều này giúp đảm bảo dữ liệu đo được phản ánh trạng thái ổn định trước và sau khi thiết bị thay đổi.
-Sau khi xác định hai khoảng thời gian trên, thuật toán sẽ:
-\begin{itemize}
-    \item Tính giá trị trung bình công suất tức thời trong mỗi khoảng (trước và sau sự kiện).
-    \item Lấy hiệu tuyệt đối giữa hai giá trị trung bình này.
-\end{itemize}
-Giá trị thu được chính là đặc trưng công suất tiêu thụ của thiết bị vừa thay đổi trạng thái.
 
-Trong quá trình trích xuất đặc trưng hình ảnh (I–V), các mốc thời gian “trước” và “sau” sự kiện cũng được xác định tương tự, nhằm đảm bảo tính nhất quán giữa hai loại đặc trưng.
+Khi thuật toán phát hiện sự kiện xác định có sự thay đổi trạng thái xảy ra, nó trả về thời điểm phát hiện sự kiện cùng với độ dài của cửa sổ sự kiện. Dựa trên hai thông tin này, ta xác định hai mốc thời gian quan trọng: Thời điểm trước sự kiện, được lấy sớm hơn thời điểm phát hiện một vài giây, và thời điểm sau sự kiện, được lấy muộn hơn thời điểm kết thúc cửa sổ sự kiện một khoảng thời gian tương tự. Việc dịch chuyển các mốc thời gian như vậy nhằm loại bỏ giai đoạn quá độ, tức khoảng thời gian thiết bị vừa thay đổi trạng thái nhưng công suất chưa ổn định. Nhờ đó, dữ liệu sử dụng để trích xuất đặc trưng phản ánh đúng trạng thái ổn định của thiết bị trước và sau thay đổi.
+
+Sau khi xác định hai khoảng thời gian này, thuật toán tiến hành tính giá trị trung bình của công suất tức thời trong từng khoảng và sau đó lấy hiệu tuyệt đối giữa hai giá trị trung bình. Kết quả thu được chính là đặc trưng công suất tiêu thụ của thiết bị tại thời điểm chuyển trạng thái. Đối với quá trình trích xuất đặc trưng hình ảnh I–V, các mốc thời gian “trước” và “sau” sự kiện cũng được xác định theo cách tương tự nhằm đảm bảo tính nhất quán giữa hai loại đặc trưng.
+
 
 \section{Trích xuất đặc trưng ảnh}
+
 \subsection{Cơ sở lý thuyết}
 
 Trong hệ thống phân tích phụ tải phi xâm lấn (NILM), toàn bộ phép đo được thực hiện tại một điểm duy nhất trên mạng điện, thường là ngay sau công tơ tổng. Điều này có nghĩa là hệ thống chỉ quan sát được điện áp $U(t)$ và dòng điện tổng $I(t)$ của toàn bộ tải trong nhà, thay vì quan sát từng thiết bị riêng lẻ như các hệ đo đa kênh. Vì vậy, bài toán NILM đặt ra câu hỏi trung tâm: Từ tín hiệu tổng hợp này, làm thế nào để suy ra sự thay đổi của từng thiết bị?
@@ -1125,17 +890,7 @@ Quá trình trích xuất đặc trưng ảnh từ tín hiệu điện áp $U$ v
 
 \textbf{Bước 1: Nội suy tuyến tính}
 
-
-Dữ liệu thu thập từ cảm biến thường có tần số mẫu không quá cao hoặc có thể không đều qua thời gian. Điều này gây khó khăn khi cần so sánh hai vùng tín hiệu trước và sau sự kiện. Vì vậy, bước đầu tiên là thực hiện nội suy tuyến tính cho cả hai tín hiệu $U$ và $I$.
-
-Nội suy tuyến tính giúp:
-\begin{itemize}
-    \item Tăng số lượng điểm mẫu, cải thiện độ phân giải tín hiệu theo thời gian.
-    \item Làm mượt dạng sóng, giúp dễ dàng quan sát chu kỳ và phát hiện biến thiên.
-    \item Giảm sai số do hiện tượng trễ hoặc thiếu mẫu.
-\end{itemize}
-
-Việc nội suy không làm thay đổi đặc tính gốc của tín hiệu mà chỉ tăng mật độ thông tin. Do đó, các bước căn chỉnh và so khớp sau đó sẽ trở nên chính xác hơn.
+Dữ liệu thu thập từ cảm biến thường có tần số lấy mẫu không quá cao hoặc đôi khi không đều theo thời gian, dẫn đến khó khăn khi cần so sánh hai vùng tín hiệu trước và sau sự kiện. Vì vậy, bước đầu tiên trong quá trình xử lý là thực hiện nội suy tuyến tính cho cả hai tín hiệu~$U$ và~$I$. Việc nội suy này giúp tăng số lượng điểm mẫu, từ đó cải thiện độ phân giải tín hiệu theo thời gian; đồng thời làm mượt dạng sóng, giúp việc quan sát chu kỳ và phát hiện những biến thiên trở nên rõ ràng hơn. Bên cạnh đó, nội suy tuyến tính còn góp phần giảm sai số do hiện tượng trễ hoặc do thiếu mẫu trong quá trình thu thập dữ liệu. Phương pháp này không làm thay đổi đặc tính gốc của tín hiệu mà chỉ tăng mật độ thông tin, giúp các bước căn chỉnh và so khớp ở các giai đoạn tiếp theo được thực hiện chính xác hơn.
 
 \begin{figure}[H]{Ví dụ minh hoạ: nội suy tín hiệu $U$ với số lượng điểm tăng gấp 6 lần số điểm gốc}
     \centering
@@ -1161,8 +916,8 @@ Khi tìm được độ dịch tối ưu:
 
 \begin{itemize}
     \item Hai tín hiệu $U_p$ và $U_t$ được căn chỉnh theo thời gian (đồng bộ pha).
-    \item Vì dòng điện $I_t$ tương ứng vớ $U_t$, nên $I_t$ được dịch theo cùng độ dịch.
-    \item Sau khi căn chỉnh xong, ta có thể lấy hiệu trực tiếp hai mảng dòng điện: 
+    \item Dòng điện $I_t$ tương ứng vớ $U_t$, nên $I_t$ được dịch theo cùng độ dịch.
+    \item Lấy hiệu trực tiếp hai mảng dòng điện: 
     $
        I_{n+1} = I_p - I_t
     $
@@ -1176,23 +931,12 @@ Nhờ đó, phần biến thiên của dòng điện thu được phản ánh đ
 
 \textbf{Bước 3: Chia đoạn và lấy trung bình theo chu kỳ}
 
-
-Sau khi căn chỉnh pha, tín hiệu được chia thành nhiều đoạn tương ứng với từng chu kỳ điện. Việc chia theo chu kỳ dựa trên các điểm zero-crossing của điện áp hoặc các đỉnh cực đại/cực tiểu.
-
-Tiếp theo, các chu kỳ được xếp chồng lên nhau và tính trung bình theo từng vị trí mẫu:
+Sau khi tín hiệu được căn chỉnh pha, dữ liệu được chia thành nhiều đoạn tương ứng với từng chu kỳ điện, dựa trên các điểm zero-crossing của điện áp hoặc các vị trí cực đại và cực tiểu. Các chu kỳ này sau đó được xếp chồng lên nhau và tính trung bình theo từng vị trí mẫu theo công thức:
 \[
 \bar{U}(i) = \frac{1}{m} \sum_{k=1}^{m} U_k(i), \qquad 
-\bar{I}(i) = \frac{1}{m} \sum_{k=1}^{m} I_k(i)
+\bar{I}(i) = \frac{1}{m} \sum_{k=1}^{m} I_k(i).
 \]
-
-Điều này giúp:
-\begin{itemize}
-    \item Loại bỏ nhiễu ngẫu nhiên.
-    \item Tăng độ ổn định của đặc trưng dạng sóng.
-    \item Thu được hình dạng trung bình đại diện cho thiết bị.
-\end{itemize}
-
-Kết quả thu được sau bước này là “đặc trưng dạng sóng” — dạng đặc trưng riêng của thiết bị, gần như bất biến theo thời gian và dễ nhận diện.
+Quá trình này giúp loại bỏ nhiễu ngẫu nhiên, tăng độ ổn định của dạng sóng và thu được một hình dạng trung bình mang tính đại diện cho thiết bị. Kết quả cuối cùng của bước này là “đặc trưng dạng sóng”, một dạng đặc trưng gần như bất biến theo thời gian và có khả năng phân biệt rõ ràng giữa các thiết bị điện khác nhau.
 
 
 \begin{figure}[H]{Hình minh họa mô tả quá trình chia đoạn và tính trung bình.}
@@ -1376,130 +1120,114 @@ Toàn bộ dữ liệu được tự thu thập trong phòng thí nghiệm, đ�
 
 \section{Quy trình đánh giá}
 
-Trong quá trình đánh giá, hệ thống nhận đầu vào là một tệp dữ liệu duy nhất, sau đó
-Đọc tuần tự giá trị dòng điện (I) và điện áp (U) tức thời.
+Trong quá trình đánh giá, hệ thống chỉ nhận một tệp dữ liệu duy nhất làm đầu vào. Tệp này được đọc tuần tự để lấy các giá trị tức thời của điện áp U và dòng điện I. Từ chuỗi tín hiệu đó, hệ thống tiến hành phát hiện những thời điểm xảy ra thay đổi trạng thái của thiết bị, sau đó thực hiện các bước tiền xử lý và trích xuất đặc trưng nhằm tạo đầu vào cho mô hình học máy dùng trong phân loại thiết bị.
 
-Phát hiện sự kiện thay đổi trạng thái thiết bị.
+Do mỗi tệp dữ liệu chỉ chứa một sự kiện thực duy nhất, nên nếu hệ thống phát hiện nhiều hơn một sự kiện thì các sự kiện thừa được xem như sự kiện giả (false positive). Ngược lại, trong trường hợp hệ thống không phát hiện được sự kiện nào, tệp dữ liệu đó được xem là một sự kiện bị bỏ sót (false negative).
 
-Tiền xử lý và trích xuất đặc trưng để đưa vào mô hình học máy phân loại thiết bị.
+Khi đánh giá mô hình học máy trong bài toán nhận diện sự kiện, chỉ những sự kiện mà thuật toán phát hiện được mới được đưa vào mô hình. Điều này dẫn đến một hạn chế quan trọng: mô hình học máy không thể phản ánh đầy đủ hiệu suất của toàn bộ hệ thống, bởi bản thân nó không “nhìn thấy” các trường hợp sự kiện giả hoặc sự kiện bị bỏ lỡ.
 
-Vì mỗi tệp chỉ chứa một sự kiện thực, nên:
-\begin{itemize}
-    \item Nếu hệ thống phát hiện nhiều hơn một sự kiện, các sự kiện dư sẽ được coi là sự kiện giả (false positive).Nếu hệ thống phát hiện nhiều hơn một sự kiện, các sự kiện dư sẽ được coi là sự kiện giả (false positive).
-    \item Nếu hệ thống không phát hiện sự kiện nào, tệp đó được coi là một sự kiện bị bỏ sót (false negative).
-\end{itemize}
-Khi đánh giá mô hình học máy (ML) trong bài toán nhận diện sự kiện, mô hình chỉ đánh giá trên các sự kiện mà thuật toán phát hiện được. Điều này dẫn đến hạn chế: mô hình không phản ánh đầy đủ hiệu suất của toàn bộ hệ thống phát hiện sự kiện.
-Trong thực tế, hệ thống có thể tạo ra:
-\begin{itemize}
-    \item Sự kiện giả (false positive): hệ thống phát hiện sự kiện dù thực tế không có.
-    \item Sự kiện bị bỏ lỡ (false negative): sự kiện thực tế xảy ra nhưng hệ thống không phát hiện.Sự kiện bị bỏ lỡ (false negative): sự kiện thực tế xảy ra nhưng hệ thống không phát hiện.
-\end{itemize}
-Ví dụ: có 100 sự kiện thực tế cần nhận diện, nhưng hệ thống chỉ phát hiện được 90 sự kiện → bỏ lỡ 10 sự kiện. Trong 90 sự kiện phát hiện được, có 8 sự kiện là giả → 8 sự kiện giả.
-Mô hình học máy chỉ đánh giá trên 82 sự kiện mà nó nhận được từ hệ thống, nên không thể đánh giá toàn diện toàn hệ thống (vì thiếu cả sự kiện giả và sự kiện bị bỏ lỡ).
-Để đánh giá tổng thể, ta quy ước:
-\begin{itemize}
-    \item Các sự kiện giả được gán nhãn thực tế là null.
-    \item Các sự kiện thật nhưng bị bỏ lỡ được xem như mô hình gán nhãn null.
-\end{itemize}
+Trong thực tế vận hành, hệ thống có thể tạo ra hai loại lỗi. Loại thứ nhất là sự kiện giả, tức hệ thống báo có sự kiện mặc dù thực tế không có. Loại thứ hai là sự kiện bị bỏ sót, tức sự kiện thực tế đã xảy ra nhưng không được phát hiện. Chẳng hạn, với 100 sự kiện thực, hệ thống chỉ phát hiện được 90 sự kiện, nghĩa là đã bỏ sót 10 sự kiện. Trong số 90 sự kiện đã phát hiện, có tám sự kiện thực chất là giả. Như vậy, mô hình học máy chỉ được đánh giá trên 82 sự kiện hợp lệ mà hệ thống gửi đến, nên không thể phản ánh toàn diện hiệu suất của toàn bộ chuỗi xử lý.
 
-Nhờ quy ước này, ta có thể đánh giá toàn bộ hệ thống (gồm cả phát hiện + phân loại) theo cách tương tự như đánh giá một mô hình ML thông thường.
+Để khắc phục vấn đề này và cho phép đánh giá hệ thống một cách tổng thể, ta áp dụng một quy ước chung. Những sự kiện giả được gán nhãn thực tế là null, trong khi các sự kiện thật nhưng bị bỏ sót được xem như trường hợp mô hình trả về nhãn null. Nhờ quy ước này, toàn bộ hệ thống — bao gồm cả phần phát hiện sự kiện và phần phân loại bằng mô hình học máy — có thể được đánh giá tương tự như cách đánh giá một mô hình máy học thông thường trên tập dữ liệu đầy đủ.
 
 \section{Kết quả thực nghiệm}
 
 Tổng số sự kiện cần nhận diện: 116 sự kiện
 
-\subsection{Đánh giá hệ thống sử dụng thuật toán phát hiện sự kiện WAMMA}
+\subsection{Kết quả hệ thống sử dụng thuật toán phát hiện sự kiện WAMMA}
 
-\begin{itemize}
-    \item Số sự kiện được phát hiện chính xác: 65/116 (56\%)
-    \item Số sự kiện bỏ lỡ: 51/116 (44\%)
-    \item Số lượng sự kiện giả phát sinh: 2
-\end{itemize}
+\begin{table}[H]{Kết quả thuật toán phát hiện sự kiện WAMMA}
+    \centering
+    \begin{tabular}{|l|c|}
+        \hline
+        \textbf{Chỉ số đánh giá} & \textbf{Giá trị} \\ \hline
+        Số sự kiện được phát hiện chính xác & 65/116 (56\%) \\ \hline
+        Số sự kiện bị bỏ lỡ & 51/116 (44\%) \\ \hline
+        Số lượng sự kiện giả phát sinh & 2 \\ \hline
+    \end{tabular}
+\end{table}
 
-\textbf{Kết quả đánh giả chỉ mô hình học máy:}
-
-\begin{itemize}
-    \item F1 Score: 95\%
-    \item Recall: 95\%
-    \item Percision: 95\%
-    \item Accuracy: 95.24\%
-\end{itemize}
+\begin{table}[H]{Kết quả mô hình và toàn bộ hệ thống sử dụng thuật toán WAMMA}
+    \centering
+    \begin{tabular}{|l|c|c|}
+        \hline
+        \textbf{Chỉ số} & \textbf{Chỉ mô hình học máy} & \textbf{Toàn bộ hệ thống} \\ \hline
+        F1 Score & 95\% & 62\% \\ \hline
+        Accuracy & 95.24\% & 50.85\% \\ \hline
+    \end{tabular}
+\end{table}
 
 \begin{figure}[H]{Kết quả phân loại sử dụng thuật toán WAMMA chỉ xét đến mô hình}
     \centering
     \includegraphics[width=0.8\linewidth]{IMAGE/ket_qua_he_thong/image9.png}
 \end{figure}
 
-\textbf{Kết quả đánh giá toàn bộ hệ thống}
-\begin{itemize}
-    \item F1 Score: 62\%
-    \item Recall: 51\%
-    \item Percision: 88\%
-    \item Accuracy: 50.85\%
-\end{itemize}
-
 \begin{figure}[H]{Kết quả toàn bộ hệ thống sử dụng thuật toán sự kiện WAMMA}
     \centering
     \includegraphics[width=0.8\linewidth]{IMAGE/ket_qua_he_thong/image10.png}
 \end{figure}
 
-\subsection{Đánh giá hệ thống sử dụng thuật toán phát hiện sự kiện Hybrid của Mengqi Lu và Zuyi Li}
-\begin{itemize}
-    \item Số sự kiện được phát hiện chính xác: 81/116 (69.83\%)
-    \item Số sự kiện bỏ lỡ: 36/116 (30.17\%)
-    \item Số lượng sự kiện giả phát sinh: 9
-\end{itemize}
-\textbf{Kết quả đánh giả chỉ mô hình học máy:}
-\begin{itemize}
-    \item F1 Score: 99\%
-    \item Recall: 99\%
-    \item Percision: 99\%
-    \item Accuracy: 98.75\%
-\end{itemize}
+\subsection{Kết quả hệ thống sử dụng thuật toán phát hiện sự kiện Hybrid của Mengqi Lu và Zuyi Li}
+\begin{table}[H]{Kết quả thuật toán phát hiện sự kiện Hybrid của Mengqi Lu và Zuyi Li}
+    \centering
+    \begin{tabular}{|l|c|}
+        \hline
+        \textbf{Chỉ số đánh giá} & \textbf{Giá trị} \\ \hline
+        Số sự kiện được phát hiện chính xác & 81/116 (69.83\%) \\ \hline
+        Số sự kiện bị bỏ lỡ & 36/116 (30.17\%) \\ \hline
+        Số lượng sự kiện giả phát sinh & 9 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]{Kết quả mô hình và toàn bộ hệ thống sử dụng thuật toán phát hiện sự kiện Hybrid của Mengqi Lu và Zuyi Li}
+    \centering
+    \begin{tabular}{|l|c|c|}
+        \hline
+        \textbf{Chỉ số} & \textbf{Chỉ mô hình học máy} & \textbf{Toàn bộ hệ thống} \\ \hline
+        F1 Score & 99\% & 73\% \\ \hline
+        Accuracy & 98.75\% & 67.52\% \\ \hline
+    \end{tabular}
+\end{table}
 
 \begin{figure}[H]{Kết quả phân loại sử dụng thuật toán Hybrid của Mengqi Lu và Zuyi Li chỉ xét đến mô hình}
     \centering
     \includegraphics[width=0.8\linewidth]{IMAGE/ket_qua_he_thong/image11.png}
 \end{figure}
 
-\textbf{Kết quả đánh giá toàn bộ hệ thống}
-\begin{itemize}
-    \item F1 Score: 73\%
-    \item Recall: 68\%
-    \item Percision: 97\%
-    \item Accuracy: 67.52\%
-\end{itemize}
 \begin{figure}[H]{Kết quả toàn bộ hệ thống sử dụng thuật toán sự kiện Hybrid của Mengqi Lu và Zuyi Li}
     \centering
     \includegraphics[width=0.8\linewidth]{IMAGE/ket_qua_he_thong/image12.png}
 \end{figure}
 
-\subsection{Đánh giá hệ thống sử dụng thuật toán phát hiện sự kiện đề xuất}
-\begin{itemize}
-    \item Số sự kiện được phát hiện chính xác: 116/116 (100\%)
-    \item Số sự kiện bỏ lỡ: 0/116 (0\%)
-    \item Số lượng sự kiện giả phát sinh: 9
-\end{itemize}
-\textbf{Kết quả đánh giả chỉ mô hình học máy:}
-\begin{itemize}
-    \item F1 Score: 95\%
-    \item Recall: 95\%
-    \item Percision: 95\%
-    \item Accuracy: 95.69\%
-\end{itemize}
+\subsection{Kết quả hệ thống sử dụng thuật toán phát hiện sự kiện đề xuất}
+
+\begin{table}[H]{Kết quả thuật toán phát hiện sự kiện đề xuất}
+    \centering
+    \begin{tabular}{|l|c|}
+        \hline
+        \textbf{Chỉ số đánh giá} & \textbf{Giá trị} \\ \hline
+        Số sự kiện được phát hiện chính xác & 116/116 (100\%) \\ \hline
+        Số sự kiện bị bỏ lỡ & 0/116 (0\%) \\ \hline
+        Số lượng sự kiện giả phát sinh & 9 \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{table}[H]{Kết quả mô hình và toàn bộ hệ thống sử dụng thuật toán phát hiện sự kiện đề xuất}
+    \centering
+    \begin{tabular}{|l|c|c|}
+        \hline
+        \textbf{Chỉ số} & \textbf{Chỉ mô hình học máy} & \textbf{Toàn bộ hệ thống} \\ \hline
+        F1 Score & 95\% & 84\% \\ \hline
+        Accuracy & 95.69\% & 88.8\% \\ \hline
+    \end{tabular}
+\end{table}
 
 \begin{figure}[H]{Kết quả phân loại sử dụng thuật toán đề xuất chỉ xét đến mô hình}
     \centering
     \includegraphics[width=0.8\linewidth]{IMAGE/ket_qua_he_thong/image13.png}
 \end{figure}
 
-\textbf{Kết quả đánh giá toàn bộ hệ thống}
-\begin{itemize}
-    \item F1 Score: 84\%
-    \item Recall: 89\%
-    \item Percision: 86\%
-    \item Accuracy: 88.8\%
-\end{itemize}
+
 \begin{figure}[H]{Kết quả toàn bộ hệ thống sử dụng thuật toán sự kiện đề xuất}
     \centering
     \includegraphics[width=0.8\linewidth]{IMAGE/ket_qua_he_thong/image14.png}
@@ -1531,46 +1259,67 @@ Tuy nhiên, để hướng tới triển khai thực tế, các vấn đề như
 % ============================
 % TÀI LIỆU THAM KHẢO
 % ============================
-\begin{thebibliography}{15}
+\bibliographystyle{IEEEtran}
+\begin{thebibliography}{11}
+\begin{bibsection}{}
 
-\begin{bibsection}{Tiếng Việt}
+\bibitem{ref1}
+G.~W. Hart, “Nonintrusive appliance load monitoring,” \emph{Proceedings of the IEEE},
+vol.~80, no.~12, pp. 1870--1891, 1992, doi: 10.1109/5.192069.
 
+\bibitem{ref2}
+M.~Kaselimi, E.~Protopapadakis, A.~Voulodimos, N.~Doulamis, and A.~Doulamis,
+“Towards trustworthy energy disaggregation: A review of challenges, methods, and perspectives for non-intrusive load monitoring,”
+\emph{Sensors}, vol.~22, no.~15, p. 5872, Aug. 2022, doi: 10.3390/s22155872.
+
+\bibitem{ref3}
+A.~Zoha, A.~Gluhak, M.~Imran, and S.~Rajasegarar,
+“Non-intrusive load monitoring approaches for disaggregated energy sensing: A survey,”
+\emph{Sensors}, vol.~12, no.~12, pp. 16838--16866, Dec. 2012, doi: 10.3390/s121216838.
+
+\bibitem{ref4}
+Shanghai Belling Co., Ltd., \emph{BL0940 Calibration-free Metering IC Datasheet}, 2021.
+[Online]. 
+
+\bibitem{ref5}
+L.~Yan, W.~Tian, H.~Wang, X.~Hao, and Z.~Li,
+“Robust event detection for residential load disaggregation,”
+\emph{Applied Energy}, vol.~331, p. 120339, Feb. 2023, doi: 10.1016/j.apenergy.2022.120339.
+
+\bibitem{ref6}
+R.~E. Kalman, “A new approach to linear filtering and prediction problems,”
+\emph{Journal of Basic Engineering}, vol.~82, no.~1, pp. 35--45, Mar. 1960, doi: 10.1115/1.3662552.
+
+\bibitem{ref7}
+M.~Lu and Z.~Li,
+“A hybrid event detection approach for non-intrusive load monitoring,”
+\emph{IEEE Transactions on Smart Grid}, vol.~11, no.~1, pp. 528--540, Jan. 2020, doi: 10.1109/TSG.2019.2924862.
+
+\bibitem{ref8}
+Y.~Liu, X.~Wang, and W.~You,
+“Non-intrusive load monitoring by voltage–current trajectory enabled transfer learning,”
+\emph{IEEE Transactions on Smart Grid}, vol.~10, no.~5, pp. 5609--5619, Sep. 2019,
+doi: 10.1109/TSG.2018.2888581.
+
+\bibitem{ref9}
+A.~Paszke \emph{et al.},
+“PyTorch: An imperative style, high-performance deep learning library,”
+in \emph{Proc. 33rd Int. Conf. Neural Information Processing Systems}, 2019,
+pp. 8026--8037. [Online].
+
+\bibitem{ref10}
+V.~Nair and G.~E. Hinton,
+“Rectified linear units improve restricted Boltzmann machines,”
+in \emph{Proc. 27th Int. Conf. Machine Learning (ICML’10)},
+Madison, WI, USA: Omnipress, 2010, pp. 807--814.
+
+\bibitem{ref11}
+D.~P. Kingma and J.~Ba,
+“Adam: A method for stochastic optimization,”
+\emph{arXiv preprint arXiv:1412.6980}, 2014, doi: 10.48550/arXiv.1412.6980.
 
 \end{bibsection}
-
-\begin{bibsection}{Tiếng Anh}
-
-\bibitem{LuLi2019Hybrid}
-M. Lu and Z. Li,
-``A Hybrid Event Detection Approach for Non-Intrusive Load Monitoring,''
-\textit{IEEE Transactions on Smart Grid},
-vol. 11, no. 1, pp. 528--540, Jan. 2020,
-doi: 10.1109/TSG.2019.2924862.
-
-\bibitem{WAMMA}
-L. Yan, W. Tian, X. Hao, Z. Li, and H. Wang,
-``Robust Event Detection for Residential Load Disaggregation,''
-\textit{IEEE Transactions on Smart Grid},
-vol. 9, no. 5, pp. 5516--5524, Sept. 2018.
-
-\bibitem{Liu2020NILM}
-H. Liu,
-\textit{Non-Intrusive Load Monitoring: Theory, Technologies and Applications}.
-Singapore: Springer Nature, 2020,
-doi: 10.1007/978-981-15-1860-7.
-
-\bibitem{zheng2018supervised}
-Z. Zheng, H. Chen, and X. Luo, ``A Supervised Event-Based Non-Intrusive Load Monitoring for Non-Linear Appliances,'' \textit{Sustainability}, vol. 10, no. 4, p. 950, Mar. 2018.
-
-\bibitem{Lu2024Siamese}
-L. Lu, J.-S. Kang, F. Meng, and M. Yu,
-``Non-Intrusive Load Identification Based on Retrainable Siamese Network,''
-\textit{Sensors}, vol. 24, no. 8, p. 2562, Apr. 2024,
-doi: 10.3390/s24082562.
-
-\end{bibsection}
-
 \end{thebibliography}
 
 
-\end{document}
+\end{document} 
