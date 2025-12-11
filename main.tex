@@ -46,6 +46,8 @@ Trước những hạn chế này, đề tài tập trung xây dựng và kiểm
 
 Kết quả thực nghiệm cho thấy thuật toán đề xuất có khả năng phát hiện sự kiện bật/tắt và nhận dạng thiết bị với độ tin cậy cao trong môi trường nhiều thiết bị hoạt động đồng thời. Đề tài đóng góp hai kết quả chính: (1) Xây dựng thành công thuật toán NILM hướng sự kiện, (2) Phát triển bộ dữ liệu thực nghiệm phục vụ kiểm thử và nghiên cứu NILM, đồng thời tạo nền tảng cho các ứng dụng thực tế trong nhà thông minh, quản lý năng lượng và giám sát tiêu thụ điện trong công nghiệp.
 
+\textbf{Từ khóa:} NILM, NILM hướng sự kiện, sự kiện bật/tắt
+
 \end{preamble}
 
 \begin{preamble}{Lời cam đoan}
@@ -222,7 +224,7 @@ Cấu trúc cụ thể của đồ án như sau:
 
 \textbf{Chương 1: Giới thiệu} – Trình bày bối cảnh nghiên cứu về NILM, các hướng tiếp cận phổ biến, đặt vấn đề và mục tiêu nghiên cứu. Đồng thời, chương này nêu tổng quan về đóng góp chính của đề tài, bao gồm xây dựng thuật toán NILM hướng sự kiện và bộ dữ liệu thực nghiệm mới.
     
-\textbf{Chương 2: Tổng quan thuật toán NILM đề xuất} – Mô tả kiến trúc và các thành phần chính của thuật toán, bao gồm khối phát hiện sự kiện, tiền xử lý và trích xuất đặc trưng, nhận dạng thiết bị. Chương này cũng nêu ưu điểm nổi bật và các hạn chế cùng hướng khắc phục.
+\textbf{Chương 2: Tổng quan thuật toán NILM đề xuất} – Mô tả kiến trúc và các thành phần chính của thuật toán, bao gồm khối phát hiện sự kiện, tiền xử lý và trích xuất đặc trưng, nhận dạng thiết bị.
     
 \textbf{Chương 3: Bộ đo thu thập dữ liệu và dữ liệu sử dụng} – Trình bày về bộ đo được sử dụng, phương pháp thu thập dữ liệu thực nghiệm, bao gồm các sự kiện bật/tắt của nhiều thiết bị, và thông tin tập dữ liệu được sử dụng.
     
@@ -844,10 +846,6 @@ Vector $x$ được đưa vào bộ phân loại gồm hai lớp fully-connected
 \end{itemize}
 
 Lớp đầu ra trả về vector logits, sau đó có thể áp dụng softmax để tính xác suất dự đoán thiết bị.
-
-\subsection{Tóm tắt kiến trúc}
-
-Như vậy, kiến trúc MLP gồm hai nhánh độc lập xử lý ảnh I--V và công suất $P$, sau đó hợp nhất vector đặc trưng và đưa vào bộ phân loại. Cấu trúc này giúp mô hình học được đặc trưng riêng của từng loại dữ liệu, đồng thời kết hợp thông tin để phân loại chính xác các thiết bị.
 
 \subsection{Hàm mất mát và tối ưu}
 
