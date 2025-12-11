@@ -131,7 +131,7 @@ Dạng sóng sau xử lý được chuyển đổi sang ảnh kích thước $32
 Bộ phân loại cuối gồm hai lớp fully-connected, đầu ra là vector logits tương ứng với số thiết bị. Mô hình được huấn luyện bằng hàm mất mát Cross-Entropy và tối ưu Adam với learning rate $10^{-3}$. Dữ liệu được chuẩn hoá và chia thành tập train/validation/test để đảm bảo mô hình học đúng đặc trưng thiết bị và đánh giá trong điều kiện nhiều thiết bị hoạt động đồng thời. Sau khi huấn luyện, mô hình và bộ mã hoá nhãn được lưu để sử dụng cho hệ thống NILM.
 
 
-\chapter{Kết quả và đánh giá thuật toán (Tóm tắt)}
+\chapter{Kết quả và đánh giá thuật toán}
 
 Phần đánh giá sử dụng một tệp dữ liệu duy nhất cho mỗi lần kiểm thử. Tín hiệu U--I được đọc tuần tự để phát hiện sự kiện, sau đó trích xuất đặc trưng và đưa vào mô hình phân loại. Vì mỗi tệp chỉ chứa một sự kiện thực, mọi sự kiện thừa đều được xem là sự kiện giả, còn trường hợp không phát hiện được sự kiện nào được xem là sự kiện bị bỏ sót. Khi đánh giá mô hình học máy, chỉ những sự kiện được phát hiện mới được đưa vào mô hình, nên mô hình không phản ánh toàn diện hiệu suất của toàn bộ thuật toán. Để khắc phục, các sự kiện giả được gán nhãn thực ``null'' và các sự kiện bị bỏ sót được xem như mô hình dự đoán ``null'', cho phép đánh giá toàn bộ thuật toán bằng các chỉ số quen thuộc như Accuracy, Precision, Recall, F1-Score và Confusion Matrix.
 
